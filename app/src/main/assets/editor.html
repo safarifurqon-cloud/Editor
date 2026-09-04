@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editor Tampilator</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f1f3f5;
+ color:#222
+}
+
+header{
+ background:#155d35;
+ color:white;
+ padding:14px 16px;
+ position:sticky;
+ top:0;
+ z-index:20
+}
+
+header h1{
+ margin:0 0 8px;
+ font-size:22px
+}
+
+.server{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ align-items:center
+}
+
+.server input{
+ flex:1;
+ min-width:240px;
+ padding:9px;
+ border:0;
+ border-radius:5px
+}
+
+button{
+ border:0;
+ border-radius:5px;
+ padding:9px 13px;
+ font-weight:bold;
+ cursor:pointer
+}
+
+.get{
+ background:#f6c344
+}
+
+.save{
+ background:#43a047;
+ color:white
+}
+
+.addpage{
+ background:#1976d2;
+ color:white;
+ margin-top:5px
+}
+
+.status{
+ font-size:13px;
+ margin-top:7px
+}
+
+main{
+ max-width:1100px;
+ margin:16px auto;
+ padding:0 10px
+}
+
+.page{
+ background:white;
+ border-radius:8px;
+ margin-bottom:18px;
+ padding:15px;
+ box-shadow:0 1px 5px #bbb
+}
+
+.pagehead{
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ align-items:center;
+ border-bottom:1px solid #ddd;
+ padding-bottom:10px
+}
+
+.pagehead strong{
+ font-size:18px
+}
+
+.pageActions{
+ display:flex;
+ gap:5px;
+ flex-wrap:wrap;
+ justify-content:flex-end
+}
+
+.pageActions button{
+ color:white
+}
+
+.moveUp{
+ background:#1565c0
+}
+
+.moveDown{
+ background:#6a1b9a
+}
+
+.deletePage{
+ background:#c62828
+}
+
+.field{
+ margin-top:12px
+}
+
+label{
+ display:block;
+ font-weight:bold;
+ margin-bottom:5px
+}
+
+input,textarea{
+ width:100%;
+ padding:9px;
+ border:1px solid #aaa;
+ border-radius:5px;
+ font-size:15px
+}
+
+textarea{
+ min-height:90px;
+ resize:vertical
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:1fr 150px;
+ gap:12px
+}
+
+/* =====================================================
+   AREA TABEL
+   ===================================================== */
+
+.tablewrap{
+ overflow:auto;
+ border:1px solid #bbb;
+ margin-top:12px
+}
+
+table{
+ border-collapse:collapse;
+ width:100%;
+ min-width:650px;
+ table-layout:fixed
+}
+
+table.has-content{
+ width:max-content;
+ min-width:0;
+ table-layout:auto
+}
+
+th,td{
+ border:1px solid #bbb;
+ padding:6px;
+ vertical-align:middle
+}
+
+th{
+ background:#e8f5e9
+}
+
+th input{
+ font-weight:bold;
+ background:white
+}
+
+td input{
+ min-width:80px
+}
+
+table:not(.has-content) th input,
+table:not(.has-content) td input{
+ width:100%
+}
+
+table.has-content th input,
+table.has-content td input{
+ width:auto;
+ min-width:60px;
+ max-width:500px
+}
+
+.action{
+ text-align:center;
+ width:48px
+}
+
+.deleteRow{
+ background:#e53935;
+ color:white;
+ padding:5px 9px;
+ border-radius:4px;
+ font-size:16px
+}
+
+.controls{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-top:10px
+}
+
+.addrow{
+ background:#2e7d32;
+ color:white
+}
+
+.notice{
+ background:#fff8e1;
+ border-left:4px solid #f9a825;
+ padding:10px;
+ margin-bottom:15px
+}
+
+.empty{
+ padding:20px;
+ text-align:center;
+ color:#777
+}
+
+/* =====================================================
+   PILIH JENIS HALAMAN
+   ===================================================== */
+
+.chooser{
+ background:white;
+ border-radius:8px;
+ margin-bottom:18px;
+ padding:20px;
+ box-shadow:0 1px 5px #bbb;
+ text-align:center
+}
+
+.chooserTitle{
+ font-size:18px;
+ font-weight:bold;
+ margin-bottom:15px
+}
+
+.chooser button{
+ margin:4px;
+ min-width:150px
+}
+
+.btnText{
+ background:#1976d2;
+ color:white
+}
+
+.btnTable{
+ background:#388e3c;
+ color:white
+}
+
+.btnCancel{
+ background:#777;
+ color:white
+}
+
+@media(max-width:650px){
+
+ .grid{
+  grid-template-columns:1fr
+ }
+
+ .server input{
+  min-width:100%
+ }
+
+ .chooser button{
+  width:100%;
+  margin:5px 0
+ }
+
+ .pagehead{
+  align-items:flex-start
+ }
+
+ .pageActions{
+  width:100%;
+ }
+
+ .pageActions button{
+  flex:1;
+ }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>Editor Tampilator</h1>
+
+<div class="server">
+
+<input
+ id="serverUrl"
+ value="http://192.168.43.40:8080"
+ placeholder="Alamat server TV Box">
+
+<button class="get" onclick="getData()">
+GET_DATA
+</button>
+
+<button class="save" onclick="saveData()">
+SIMPAN DATA
+</button>
+
+</div>
+
+<div id="status" class="status">
+Siap.
+</div>
+
+</header>
+
+
+<main>
+
+<div class="notice">
+<b>Catatan durasi:</b>
+durasi adalah waktu diam untuk satu layar awal.
+Jika tabel lebih panjang dari layar, Tampilator akan diam sesuai durasi,
+kemudian scroll perlahan sampai bawah dan diam 5 detik pada bagian terakhir.
+</div>
+
+<div id="pages"></div>
+
+<button class="addpage" onclick="addPage()">
+＋ Tambah Halaman
+</button>
+
+</main>
+
+
+<script>
+
+/* =====================================================
+   DATA
+   ===================================================== */
+
+let data={
+ pages:[]
+};
+
+
+/* =====================================================
+   ESCAPE HTML
+   ===================================================== */
+
+function esc(v){
+
+ return String(v??'')
+  .replace(/&/g,'&amp;')
+  .replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;');
+
+}
+
+
+/* =====================================================
+   STATUS
+   ===================================================== */
+
+function setStatus(text,ok=true){
+
+ const e=document.getElementById('status');
+
+ e.textContent=text;
+
+ e.style.color=
+  ok
+  ? '#d7ffd9'
+  : '#ffd0d0';
+
+}
+
+
+/* =====================================================
+   NORMALISASI DATA
+   ===================================================== */
+
+function normalize(){
+
+ if(!data || !Array.isArray(data.pages)){
+
+  data={
+   pages:[]
+  };
+
+ }
+
+
+ data.pages.forEach((p,i)=>{
+
+  if(!p || typeof p!=='object'){
+
+   data.pages[i]={
+    type:'table',
+    judul:'Halaman '+(i+1),
+    durasi:10,
+    columns:[
+     'Kolom 1',
+     'Kolom 2',
+     'Kolom 3'
+    ],
+    rows:[
+     ['','','']
+    ]
+   };
+
+   return;
+
+  }
+
+
+  p.judul=
+   p.judul ||
+   p.title ||
+   ('Halaman '+(i+1));
+
+
+  p.type=
+   p.type ||
+   'table';
+
+
+  p.durasi=
+   Math.max(
+    1,
+    Number(
+     p.durasi ??
+     p.duration
+    )||10
+   );
+
+
+  if(!Array.isArray(p.columns)){
+
+   if(Array.isArray(p.headers)){
+
+    p.columns=
+     p.headers.slice();
+
+   }else{
+
+    p.columns=[
+     'Kolom 1',
+     'Kolom 2',
+     'Kolom 3'
+    ];
+
+   }
+
+  }
+
+
+  if(!p.columns.length){
+
+   p.columns=[
+    'Kolom 1'
+   ];
+
+  }
+
+
+  if(p.columns.length>12){
+
+   p.columns=
+    p.columns.slice(0,12);
+
+  }
+
+
+  if(!Array.isArray(p.rows)){
+
+   p.rows=[];
+
+  }
+
+
+  p.rows=p.rows.map(row=>{
+
+   if(!Array.isArray(row)){
+
+    row=[];
+
+   }
+
+
+   while(
+    row.length<
+    p.columns.length
+   ){
+
+    row.push('');
+
+   }
+
+
+   return row.slice(
+    0,
+    p.columns.length
+   );
+
+  });
+
+
+  if(p.type==='text'){
+
+   p.isi=
+    p.isi ||
+    '';
+
+  }
+
+ });
+
+}
+
+
+/* =====================================================
+   CEK APAKAH TABEL SUDAH ADA ISINYA
+   ===================================================== */
+
+function tableHasContent(pi){
+
+ const p=
+  data.pages[pi];
+
+ if(!p || p.type==='text'){
+  return false;
+ }
+
+
+ for(const h of p.columns){
+
+  if(
+   String(h??'').trim()!==''
+  ){
+
+   if(
+    !/^Kolom \d+$/.test(
+     String(h).trim()
+    )
+   ){
+
+    return true;
+
+   }
+
+  }
+
+ }
+
+
+ for(const row of p.rows){
+
+  for(const value of row){
+
+   if(
+    String(value??'').trim()!==''
+   ){
+
+    return true;
+
+   }
+
+  }
+
+ }
+
+
+ return false;
+
+}
+
+
+/* =====================================================
+   UPDATE LEBAR TABEL
+   ===================================================== */
+
+function updateTableSizing(pi){
+
+ const table=
+  document.querySelector(
+   `table[data-page="${pi}"]`
+  );
+
+
+ if(!table){
+  return;
+ }
+
+
+ if(tableHasContent(pi)){
+
+  table.classList.add(
+   'has-content'
+  );
+
+ }
+ else{
+
+  table.classList.remove(
+   'has-content'
+  );
+
+ }
+
+}
+
+
+/* =====================================================
+   PINDAH HALAMAN KE ATAS
+   ===================================================== */
+
+function movePageUp(i){
+
+ if(i<=0){
+  return;
+ }
+
+ const temp=
+  data.pages[i-1];
+
+ data.pages[i-1]=
+  data.pages[i];
+
+ data.pages[i]=
+  temp;
+
+ const savedServerUrl = localStorage.getItem('tampilatorServerUrl');
+if(savedServerUrl) document.getElementById('serverUrl').value=savedServerUrl;
+render();
+
+}
+
+
+/* =====================================================
+   PINDAH HALAMAN KE BAWAH
+   ===================================================== */
+
+function movePageDown(i){
+
+ if(i>=data.pages.length-1){
+  return;
+ }
+
+ const temp=
+  data.pages[i+1];
+
+ data.pages[i+1]=
+  data.pages[i];
+
+ data.pages[i]=
+  temp;
+
+ render();
+
+}
+
+
+/* =====================================================
+   RENDER
+   ===================================================== */
+
+function render(){
+
+ normalize();
+
+ const root=
+  document.getElementById('pages');
+
+
+ if(!data.pages.length){
+
+  root.innerHTML=
+   '<div class="empty">'+
+   'Belum ada halaman. Tekan Tambah Halaman.'+
+   '</div>';
+
+  return;
+
+ }
+
+
+ root.innerHTML=
+  data.pages.map((p,pi)=>{
+
+
+  /* =================================================
+     HALAMAN TEXT
+     ================================================= */
+
+  if(p.type==='text'){
+
+   return `
+
+   <section class="page">
+
+    <div class="pagehead">
+
+     <strong>
+      Halaman ${pi+1}
+     </strong>
+
+     <div class="pageActions">
+
+      <button
+       class="moveUp"
+       onclick="movePageUp(${pi})"
+       ${pi===0?'disabled':''}>
+       ↑ Naik
+      </button>
+
+      <button
+       class="moveDown"
+       onclick="movePageDown(${pi})"
+       ${pi===data.pages.length-1?'disabled':''}>
+       ↓ Turun
+      </button>
+
+      <button
+       class="deletePage"
+       onclick="deletePage(${pi})">
+       Hapus Halaman
+      </button>
+
+     </div>
+
+    </div>
+
+
+    <div class="field">
+
+     <label>Judul</label>
+
+     <input
+      value="${esc(p.judul)}"
+      oninput="
+       data.pages[${pi}].judul=this.value
+      ">
+
+    </div>
+
+
+    <div class="field">
+
+     <label>Isi Pengumuman</label>
+
+     <textarea
+      oninput="
+       data.pages[${pi}].isi=this.value
+      ">${esc(p.isi)}</textarea>
+
+    </div>
+
+
+    <div class="field">
+
+     <label>Durasi (detik)</label>
+
+     <input
+      type="number"
+      min="1"
+      value="${p.durasi}"
+      oninput="
+       data.pages[${pi}].durasi=
+       Math.max(
+        1,
+        Number(this.value)||1
+       )
+      ">
+
+    </div>
+
+   </section>
+
+   `;
+
+  }
+
+
+  /* =================================================
+     HALAMAN TABEL
+     ================================================= */
+
+  return `
+
+  <section class="page">
+
+   <div class="pagehead">
+
+    <strong>
+     Halaman ${pi+1}
+    </strong>
+
+    <div class="pageActions">
+
+     <button
+      class="moveUp"
+      onclick="movePageUp(${pi})"
+      ${pi===0?'disabled':''}>
+      ↑ Naik
+     </button>
+
+     <button
+      class="moveDown"
+      onclick="movePageDown(${pi})"
+      ${pi===data.pages.length-1?'disabled':''}>
+      ↓ Turun
+     </button>
+
+     <button
+      class="deletePage"
+      onclick="deletePage(${pi})">
+      Hapus Halaman
+     </button>
+
+    </div>
+
+   </div>
+
+
+   <div class="field">
+
+    <label>Judul Tabel</label>
+
+    <input
+     value="${esc(p.judul)}"
+     oninput="
+      data.pages[${pi}].judul=this.value
+     ">
+
+   </div>
+
+
+   <div class="grid">
+
+    <div class="field">
+
+     <label>Jumlah Kolom</label>
+
+     <input
+      type="number"
+      min="1"
+      max="12"
+      value="${p.columns.length}"
+      onchange="
+       setCols(${pi},this.value)
+      ">
+
+    </div>
+
+
+    <div class="field">
+
+     <label>Durasi (detik)</label>
+
+     <input
+      type="number"
+      min="1"
+      value="${p.durasi}"
+      oninput="
+       data.pages[${pi}].durasi=
+       Math.max(
+        1,
+        Number(this.value)||1
+       )
+      ">
+
+    </div>
+
+   </div>
+
+
+   <div class="tablewrap">
+
+    <table
+     data-page="${pi}"
+     class="${
+      tableHasContent(pi)
+       ? 'has-content'
+       : ''
+     }">
+
+     <thead>
+
+      <tr>
+
+       ${
+        p.columns.map((h,ci)=>`
+
+        <th>
+
+         <input
+          value="${esc(h)}"
+          oninput="
+           data.pages[${pi}].columns[${ci}]=this.value;
+           updateTableSizing(${pi})
+          ">
+
+        </th>
+
+        `).join('')
+       }
+
+       <th class="action">
+        X
+       </th>
+
+      </tr>
+
+     </thead>
+
+
+     <tbody>
+
+      ${
+       p.rows.map((r,ri)=>`
+
+       <tr>
+
+        ${
+         r.map((v,ci)=>`
+
+         <td>
+
+          <input
+           value="${esc(v)}"
+           oninput="
+            data.pages[${pi}].rows[${ri}][${ci}]=this.value;
+            updateTableSizing(${pi})
+           ">
+
+         </td>
+
+         `).join('')
+        }
+
+
+        <td class="action">
+
+         <button
+          class="deleteRow"
+          title="Hapus baris"
+          onclick="
+           deleteRow(${pi},${ri})
+          ">
+          X
+         </button>
+
+        </td>
+
+       </tr>
+
+       `).join('')
+      }
+
+     </tbody>
+
+    </table>
+
+   </div>
+
+
+   <div class="controls">
+
+    <button
+     class="addrow"
+     onclick="addRow(${pi})">
+     ＋ Tambah Baris
+    </button>
+
+   </div>
+
+  </section>
+
+  `;
+
+ }).join('');
+
+}
+
+
+/* =====================================================
+   TAMBAH HALAMAN
+   ===================================================== */
+
+function addPage(){
+
+ const root=
+  document.getElementById('pages');
+
+
+ root.innerHTML=`
+
+  <div class="chooser">
+
+   <div class="chooserTitle">
+    Pilih Jenis Halaman
+   </div>
+
+   <button
+    class="btnText"
+    onclick="buatHalamanText()">
+    HALAMAN TEXT
+   </button>
+
+   <button
+    class="btnTable"
+    onclick="buatHalamanTabel()">
+    TABEL
+   </button>
+
+   <button
+    class="btnCancel"
+    onclick="render()">
+    BATAL
+   </button>
+
+  </div>
+
+ `;
+
+}
+
+
+/* =====================================================
+   BUAT HALAMAN TEXT
+   ===================================================== */
+
+function buatHalamanText(){
+
+ const number=
+  data.pages.length+1;
+
+
+ data.pages.push({
+
+  type:'text',
+
+  judul:
+   'Halaman '+number,
+
+  isi:'',
+
+  durasi:10
+
+ });
+
+
+ render();
+
+}
+
+
+/* =====================================================
+   BUAT HALAMAN TABEL
+   ===================================================== */
+
+function buatHalamanTabel(){
+
+ const number=
+  data.pages.length+1;
+
+
+ data.pages.push({
+
+  type:'table',
+
+  judul:
+   'Halaman '+number,
+
+  durasi:10,
+
+  columns:[
+   'Kolom 1',
+   'Kolom 2',
+   'Kolom 3'
+  ],
+
+  rows:[
+   ['','','']
+  ]
+
+ });
+
+
+ render();
+
+}
+
+
+/* =====================================================
+   HAPUS HALAMAN
+   ===================================================== */
+
+function deletePage(i){
+
+ if(
+  confirm('Hapus halaman ini?')
+ ){
+
+  data.pages.splice(i,1);
+
+  render();
+
+ }
+
+}
+
+
+/* =====================================================
+   TAMBAH BARIS
+   ===================================================== */
+
+function addRow(pi){
+
+ const p=
+  data.pages[pi];
+
+
+ p.rows.push(
+  new Array(
+   p.columns.length
+  ).fill('')
+ );
+
+
+ render();
+
+}
+
+
+/* =====================================================
+   HAPUS BARIS
+   ===================================================== */
+
+function deleteRow(pi,ri){
+
+ data.pages[pi].rows.splice(
+  ri,
+  1
+ );
+
+ render();
+
+}
+
+
+/* =====================================================
+   UBAH JUMLAH KOLOM
+   ===================================================== */
+
+function setCols(pi,val){
+
+ let n=
+  Math.max(
+   1,
+   Math.min(
+    12,
+    parseInt(val)||1
+   )
+  );
+
+
+ const p=
+  data.pages[pi];
+
+
+ p.columns=
+  p.columns.slice(0,n);
+
+
+ while(
+  p.columns.length<n
+ ){
+
+  p.columns.push(
+   'Kolom '+
+   (p.columns.length+1)
+  );
+
+ }
+
+
+ p.rows.forEach(row=>{
+
+  row.length=n;
+
+  while(
+   row.length<n
+  ){
+
+   row.push('');
+
+  }
+
+ });
+
+
+ render();
+
+}
+
+
+/* =====================================================
+   ALAMAT SERVER
+   ===================================================== */
+
+function saveServerUrl(){
+ const e=document.getElementById('serverUrl');
+ let v=e.value.trim().replace(/\/+$/,'');
+ if(v){ e.value=v; localStorage.setItem('tampilatorServerUrl',v); }
+}
+
+function url(){
+
+ return document
+  .getElementById('serverUrl')
+  .value
+  .trim()
+  .replace(/\/+$/,'');
+
+}
+
+
+/* =====================================================
+   GET DATA
+   ===================================================== */
+
+async function getData(){
+
+ setStatus(
+  'Mengambil data dari TV Box...',
+  true
+ );
+
+
+ try{
+
+  const r=
+   await fetch(
+    url()+
+    '/Get_Data?t='+
+    Date.now(),
+    {
+     method:'GET',
+     cache:'no-store'
+    }
+   );
+
+
+  if(!r.ok){
+
+   throw Error(
+    'HTTP '+r.status
+   );
+
+  }
+
+
+  const x=
+   await r.json();
+
+
+  if(
+   !x ||
+   !x.data ||
+   !Array.isArray(
+    x.data.pages
+   )
+  ){
+
+   throw Error(
+    'Format data dari server tidak sesuai.'
+   );
+
+  }
+
+
+  data=
+   x.data;
+
+
+  normalize();
+
+  render();
+
+
+  setStatus(
+   'Data berhasil diambil dari TV Box.',
+   true
+  );
+
+
+ }catch(e){
+
+  console.error(e);
+
+
+  setStatus(
+   'GET_DATA gagal: '+
+   e.message,
+   false
+  );
+
+ }
+
+}
+
+
+/* =====================================================
+   SIMPAN DATA
+   ===================================================== */
+
+async function saveData(){
+
+ normalize();
+
+ setStatus(
+  'Menyimpan data ke TV Box...',
+  true
+ );
+
+
+ try{
+
+  const r=
+   await fetch(
+    url()+'/Set_Data',
+    {
+     method:'POST',
+
+     headers:{
+      'Content-Type':
+       'application/json'
+     },
+
+     body:
+      JSON.stringify(data)
+    }
+   );
+
+
+  if(!r.ok){
+
+   throw Error(
+    'HTTP '+r.status
+   );
+
+  }
+
+
+  const x=
+   await r.json();
+
+
+  if(
+   x &&
+   x.status &&
+   x.status!=='OK'
+  ){
+
+   throw Error(
+    x.message||
+    'Server menolak data.'
+   );
+
+  }
+
+
+  setStatus(
+   'Data berhasil disimpan ke TV Box.',
+   true
+  );
+
+
+ }catch(e){
+
+  console.error(e);
+
+
+  setStatus(
+   'SIMPAN gagal: '+
+   e.message,
+   false
+  );
+
+ }
+
+}
+
+
+/* =====================================================
+   MULAI
+   ===================================================== */
+
+render();
+
+</script>
+
+</body>
+</html>
