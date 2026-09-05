@@ -36,13 +36,6 @@ header h1{
  align-items:center
 }
 
-.server input{
- flex:1;
- min-width:240px;
- padding:9px;
- border:0;
- border-radius:5px
-}
 
 button{
  border:0;
@@ -288,10 +281,7 @@ table.has-content td input{
   grid-template-columns:1fr
  }
 
- .server input{
-  min-width:100%
- }
-
+ 
  .chooser button{
   width:100%;
   margin:5px 0
@@ -321,17 +311,16 @@ table.has-content td input{
 
 <div class="server">
 
-<input
- id="serverUrl"
- value="http://192.168.43.40:8080"
- placeholder="Alamat server TV Box">
+<button class="get" onclick="findTVBox()">
+Cari Tampilator
+</button>
 
 <button class="get" onclick="getData()">
-GET_DATA
+Ambil Data
 </button>
 
 <button class="save" onclick="saveData()">
-SIMPAN DATA
+Simpan Data
 </button>
 
 </div>
@@ -659,9 +648,9 @@ function movePageUp(i){
  data.pages[i]=
   temp;
 
- const savedServerUrl = localStorage.getItem('tampilatorServerUrl');
-if(savedServerUrl) document.getElementById('serverUrl').value=savedServerUrl;
-render();
+ render();
+
+findTVBox();
 
 }
 
@@ -1239,25 +1228,45 @@ function setCols(pi,val){
    ALAMAT SERVER
    ===================================================== */
 
-function saveServerUrl(){
- const e=document.getElementById('serverUrl');
- let v=e.value.trim().replace(/\/+$/,'');
- if(v){ e.value=v; localStorage.setItem('tampilatorServerUrl',v); }
-}
+let tvBoxUrl='';
 
 function url(){
+ return tvBoxUrl;
+}
 
- return document
-  .getElementById('serverUrl')
-  .value
-  .trim()
-  .replace(/\/+$/,'');
+async function probe(host){
+ try{
+  const r=await fetch('http://'+host+':8080/Get_Data?t='+Date.now(),{method:'GET',cache:'no-store'});
+  if(!r.ok)return false;
+  const x=await r.json();
+  return !!(x&&x.data&&Array.isArray(x.data.pages));
+ }catch(e){return false;}
+}
 
+async function findTVBox(){
+ setStatus('Mencari Tampilator...',true);
+ tvBoxUrl='';
+ const hosts=[];
+ for(let i=1;i<=254;i++) hosts.push('192.168.43.'+i);
+ let found=false;
+ const batch=20;
+ for(let i=0;i<hosts.length&&!found;i+=batch){
+  const group=hosts.slice(i,i+batch);
+  const results=await Promise.all(group.map(async h=>({h,ok:await probe(h)})));
+  const hit=results.find(x=>x.ok);
+  if(hit){tvBoxUrl='http://'+hit.h+':8080';found=true;}
+ }
+ if(found){
+  setStatus('Tampilator ditemukan: '+tvBoxUrl,true);
+  return true;
+ }
+ setStatus('Tampilator tidak ditemukan. Pastikan HP terhubung ke hotspot TV Box.',false);
+ return false;
 }
 
 
 /* =====================================================
-   GET DATA
+   AMBIL DATA
    ===================================================== */
 
 async function getData(){
@@ -1331,7 +1340,7 @@ async function getData(){
 
 
   setStatus(
-   'GET_DATA gagal: '+
+   'Ambil Data gagal: '+
    e.message,
    false
   );
@@ -1413,7 +1422,7 @@ async function saveData(){
 
 
   setStatus(
-   'SIMPAN gagal: '+
+   'Simpan Data gagal: '+
    e.message,
    false
   );
@@ -1428,6 +1437,8 @@ async function saveData(){
    ===================================================== */
 
 render();
+
+findTVBox();
 
 </script>
 
