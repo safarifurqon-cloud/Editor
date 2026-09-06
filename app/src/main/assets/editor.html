@@ -3,7 +3,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Editor Tampilator</title>
 
 <style>
@@ -135,7 +135,7 @@ input,textarea{
  padding:9px;
  border:1px solid #aaa;
  border-radius:5px;
- font-size:16px
+ font-size:15px
 }
 
 textarea{
@@ -158,7 +158,7 @@ textarea{
 table{
  border-collapse:collapse;
  width:100%;
- min-width:600px;
+ min-width:650px;
  table-layout:fixed
 }
 
@@ -168,6 +168,12 @@ table.has-content{
  table-layout:auto
 }
 
+table.finance-table{
+ width:100%;
+ min-width:700px;
+ table-layout:fixed
+}
+
 th,td{
  border:1px solid #bbb;
  padding:6px;
@@ -175,6 +181,10 @@ th,td{
 }
 
 th{
+ background:#e8f5e9
+}
+
+.finance-table th{
  background:#e8f5e9
 }
 
@@ -199,9 +209,39 @@ table.has-content td input{
  max-width:500px
 }
 
+.finance-table th input,
+.finance-table td input{
+ width:100%;
+ min-width:0;
+ max-width:none
+}
+
+.finance-table th:nth-child(1),
+.finance-table td:nth-child(1){
+ width:15%
+}
+
+.finance-table th:nth-child(2),
+.finance-table td:nth-child(2){
+ width:45%
+}
+
+.finance-table th:nth-child(3),
+.finance-table td:nth-child(3),
+.finance-table th:nth-child(4),
+.finance-table td:nth-child(4){
+ width:20%
+}
+
+.finance-table td:nth-child(3) input,
+.finance-table td:nth-child(4) input{
+ text-align:right;
+ white-space:nowrap
+}
+
 .action{
  text-align:center;
- width:48px
+ width:48px!important
 }
 
 .deleteRow{
@@ -268,40 +308,13 @@ table.has-content td input{
 }
 
 .btnFinance{
- background:#ef6c00;
+ background:#8e6b00;
  color:white
 }
 
 .btnCancel{
  background:#777;
  color:white
-}
-
-/* FINANCE */
-
-.finance table{
- min-width:650px
-}
-
-.finance th{
- background:#fff3e0
-}
-
-.finance th:nth-child(1),
-.finance td:nth-child(1){
- min-width:120px
-}
-
-.finance th:nth-child(2),
-.finance td:nth-child(2){
- min-width:220px
-}
-
-.finance th:nth-child(3),
-.finance td:nth-child(3),
-.finance th:nth-child(4),
-.finance td:nth-child(4){
- min-width:140px
 }
 
 @media(max-width:650px){
@@ -316,16 +329,15 @@ table.has-content td input{
  }
 
  .pagehead{
-  align-items:flex-start;
-  flex-direction:column
+  align-items:flex-start
  }
 
  .pageActions{
-  width:100%
+  width:100%;
  }
 
  .pageActions button{
-  flex:1
+  flex:1;
  }
 
 }
@@ -380,26 +392,12 @@ kemudian scroll perlahan sampai bawah dan diam 5 detik pada bagian terakhir.
 
 <script>
 
-/* =====================================================
-   DATA
-   ===================================================== */
+const MAX_NORMAL_TABLE_COLUMNS=4;
+const FINANCE_COLUMNS=4;
 
 let data={
  pages:[]
 };
-
-
-/* =====================================================
-   KONSTANTA
-   ===================================================== */
-
-const MAX_NORMAL_TABLE_COLUMNS=4;
-const FINANCE_COLUMNS=4;
-
-
-/* =====================================================
-   ESCAPE HTML
-   ===================================================== */
 
 function esc(v){
 
@@ -410,11 +408,6 @@ function esc(v){
   .replace(/"/g,'&quot;');
 
 }
-
-
-/* =====================================================
-   STATUS
-   ===================================================== */
 
 function setStatus(text,ok=true){
 
@@ -428,11 +421,6 @@ function setStatus(text,ok=true){
   : '#ffd0d0';
 
 }
-
-
-/* =====================================================
-   NORMALISASI DATA
-   ===================================================== */
 
 function normalize(){
 
@@ -475,16 +463,6 @@ function normalize(){
    p.type ||
    'table';
 
-  if(
-   p.type!=='text' &&
-   p.type!=='table' &&
-   p.type!=='finance'
-  ){
-
-   p.type='table';
-
-  }
-
   p.durasi=
    Math.max(
     1,
@@ -494,60 +472,63 @@ function normalize(){
     )||10
    );
 
-  if(p.type==='text'){
+  if(p.type==='finance'){
 
-   p.isi=
-    p.isi ||
-    '';
+   p.columns=[
+    ...(Array.isArray(p.columns)
+      ? p.columns
+      : [])
+   ].slice(0,FINANCE_COLUMNS);
 
-   return;
+   while(
+    p.columns.length<FINANCE_COLUMNS
+   ){
 
-  }
+    p.columns.push(
+     'Kolom '+
+     (p.columns.length+1)
+    );
 
-  if(!Array.isArray(p.columns)){
+   }
 
-   if(Array.isArray(p.headers)){
+  }else{
 
-    p.columns=
-     p.headers.slice();
+   if(!Array.isArray(p.columns)){
 
-   }else{
+    if(Array.isArray(p.headers)){
+
+     p.columns=
+      p.headers.slice();
+
+    }else{
+
+     p.columns=[
+      'Kolom 1',
+      'Kolom 2',
+      'Kolom 3'
+     ];
+
+    }
+
+   }
+
+   if(!p.columns.length){
 
     p.columns=[
-     'Kolom 1',
-     'Kolom 2',
-     'Kolom 3'
+     'Kolom 1'
     ];
 
    }
 
-  }
+   if(p.columns.length>MAX_NORMAL_TABLE_COLUMNS){
 
-  const maxCols=
-   p.type==='finance'
-   ? FINANCE_COLUMNS
-   : MAX_NORMAL_TABLE_COLUMNS;
+    p.columns=
+     p.columns.slice(
+      0,
+      MAX_NORMAL_TABLE_COLUMNS
+     );
 
-  if(p.columns.length>maxCols){
-
-   p.columns=
-    p.columns.slice(0,maxCols);
-
-  }
-
-  if(!p.columns.length){
-
-   p.columns=
-    p.type==='finance'
-    ? [
-       'Kolom 1',
-       'Kolom 2',
-       'Kolom 3',
-       'Kolom 4'
-      ]
-    : [
-       'Kolom 1'
-      ];
+   }
 
   }
 
@@ -581,37 +562,42 @@ function normalize(){
 
   });
 
+  if(p.type==='text'){
+
+   p.isi=
+    p.isi ||
+    '';
+
+  }
+
  });
 
 }
-
-
-/* =====================================================
-   CEK ISI TABEL
-   ===================================================== */
 
 function tableHasContent(pi){
 
  const p=
   data.pages[pi];
 
- if(
-  !p ||
-  p.type==='text'
- ){
+ if(!p || p.type==='text'){
   return false;
  }
 
  for(const h of p.columns){
 
   if(
-   String(h??'').trim()!=='' &&
-   !/^Kolom \d+$/.test(
-    String(h).trim()
-   )
+   String(h??'').trim()!==''
   ){
 
-   return true;
+   if(
+    !/^Kolom \d+$/.test(
+     String(h).trim()
+    )
+   ){
+
+    return true;
+
+   }
 
   }
 
@@ -636,11 +622,6 @@ function tableHasContent(pi){
  return false;
 
 }
-
-
-/* =====================================================
-   UPDATE LEBAR TABEL
-   ===================================================== */
 
 function updateTableSizing(pi){
 
@@ -669,11 +650,6 @@ function updateTableSizing(pi){
 
 }
 
-
-/* =====================================================
-   PINDAH HALAMAN
-   ===================================================== */
-
 function movePageUp(i){
 
  if(i<=0){
@@ -693,7 +669,6 @@ function movePageUp(i){
 
 }
 
-
 function movePageDown(i){
 
  if(i>=data.pages.length-1){
@@ -712,11 +687,6 @@ function movePageDown(i){
  render();
 
 }
-
-
-/* =====================================================
-   RENDER
-   ===================================================== */
 
 function render(){
 
@@ -739,297 +709,83 @@ function render(){
  root.innerHTML=
   data.pages.map((p,pi)=>{
 
-   /* =================================================
-      TEXT
-      ================================================= */
+  if(p.type==='text'){
 
-   if(p.type==='text'){
+   return `
 
-    return `
+   <section class="page">
 
-    <section class="page">
+    <div class="pagehead">
 
-     <div class="pagehead">
+     <strong>
+      Halaman ${pi+1}
+     </strong>
 
-      <strong>
-       Halaman ${pi+1}
-      </strong>
+     <div class="pageActions">
 
-      <div class="pageActions">
+      <button
+       class="moveUp"
+       onclick="movePageUp(${pi})"
+       ${pi===0?'disabled':''}>
+       ↑ Naik
+      </button>
 
-       <button
-        class="moveUp"
-        onclick="movePageUp(${pi})"
-        ${pi===0?'disabled':''}>
-        ↑ Naik
-       </button>
+      <button
+       class="moveDown"
+       onclick="movePageDown(${pi})"
+       ${pi===data.pages.length-1?'disabled':''}>
+       ↓ Turun
+      </button>
 
-       <button
-        class="moveDown"
-        onclick="movePageDown(${pi})"
-        ${pi===data.pages.length-1?'disabled':''}>
-        ↓ Turun
-       </button>
-
-       <button
-        class="deletePage"
-        onclick="deletePage(${pi})">
-        Hapus Halaman
-       </button>
-
-      </div>
+      <button
+       class="deletePage"
+       onclick="deletePage(${pi})">
+       Hapus Halaman
+      </button>
 
      </div>
 
-     <div class="field">
+    </div>
 
-      <label>Judul</label>
+    <div class="field">
 
-      <input
-       value="${esc(p.judul)}"
-       oninput="
-        data.pages[${pi}].judul=this.value
-       ">
+     <label>Judul</label>
 
-     </div>
+     <input
+      value="${esc(p.judul)}"
+      oninput="
+       data.pages[${pi}].judul=this.value
+      ">
 
-     <div class="field">
+    </div>
 
-      <label>Isi Pengumuman</label>
+    <div class="field">
 
-      <textarea
-       oninput="
-        data.pages[${pi}].isi=this.value
-       ">${esc(p.isi)}</textarea>
+     <label>Isi Pengumuman</label>
 
-```
- </div>
-
- <div class="field">
-
-  <label>Durasi (detik)</label>
-
-  <input
-   type="number"
-   min="1"
-   value="${p.durasi}"
-   oninput="
-    data.pages[${pi}].durasi=
-    Math.max(
-     1,
-     Number(this.value)||1
-    )
-   ">
-
- </div>
-
-</section>
-
-`;
-```
-
-}
-
-/* =================================================
-TABEL / FINANCE
-================================================= */
-
-const isFinance=
-p.type==='finance';
-
-return `
-
-   <section class="page ${isFinance?'finance':''}">
+     <textarea
+      oninput="
+       data.pages[${pi}].isi=this.value
+      ">${esc(p.isi)}</textarea>
 
 ```
-<div class="pagehead">
-
- <strong>
-  Halaman ${pi+1}
- </strong>
-
- <div class="pageActions">
-
-  <button
-   class="moveUp"
-   onclick="movePageUp(${pi})"
-   ${pi===0?'disabled':''}>
-   ↑ Naik
-  </button>
-
-  <button
-   class="moveDown"
-   onclick="movePageDown(${pi})"
-   ${pi===data.pages.length-1?'disabled':''}>
-   ↓ Turun
-  </button>
-
-  <button
-   class="deletePage"
-   onclick="deletePage(${pi})">
-   Hapus Halaman
-  </button>
-
- </div>
-
 </div>
-
 
 <div class="field">
 
- <label>
-  ${isFinance?'Judul Keuangan':'Judul Tabel'}
- </label>
+ <label>Durasi (detik)</label>
 
  <input
-  value="${esc(p.judul)}"
+  type="number"
+  min="1"
+  value="${p.durasi}"
   oninput="
-   data.pages[${pi}].judul=this.value
+   data.pages[${pi}].durasi=
+   Math.max(
+    1,
+    Number(this.value)||1
+   )
   ">
-
-</div>
-
-
-<div class="grid">
-
- <div class="field">
-
-  <label>
-   Jumlah Kolom
-  </label>
-
-  <input
-   type="number"
-   min="${isFinance?4:1}"
-   max="${isFinance?4:4}"
-   value="${p.columns.length}"
-   ${isFinance?'disabled':''}
-   onchange="
-    setCols(${pi},this.value)
-   ">
-
- </div>
-
-
- <div class="field">
-
-  <label>
-   Durasi (detik)
-  </label>
-
-  <input
-   type="number"
-   min="1"
-   value="${p.durasi}"
-   oninput="
-    data.pages[${pi}].durasi=
-    Math.max(
-     1,
-     Number(this.value)||1
-    )
-   ">
-
- </div>
-
-</div>
-
-
-<div class="tablewrap">
-
- <table
-  data-page="${pi}"
-  class="${
-   tableHasContent(pi)
-   ? 'has-content'
-   : ''
-  }">
-
-  <thead>
-
-   <tr>
-
-    ${
-     p.columns.map((h,ci)=>`
-
-     <th>
-
-      <input
-       value="${esc(h)}"
-       oninput="
-        data.pages[${pi}].columns[${ci}]=this.value;
-        updateTableSizing(${pi})
-       ">
-
-     </th>
-
-     `).join('')
-    }
-
-    <th class="action">
-     X
-    </th>
-
-   </tr>
-
-  </thead>
-
-
-  <tbody>
-
-   ${
-    p.rows.map((r,ri)=>`
-
-    <tr>
-
-     ${
-      r.map((v,ci)=>`
-
-      <td>
-
-       <input
-        value="${esc(v)}"
-        oninput="
-         data.pages[${pi}].rows[${ri}][${ci}]=this.value;
-         updateTableSizing(${pi})
-        ">
-
-      </td>
-
-      `).join('')
-     }
-
-     <td class="action">
-
-      <button
-       class="deleteRow"
-       title="Hapus baris"
-       onclick="
-        deleteRow(${pi},${ri})
-       ">
-       X
-      </button>
-
-     </td>
-
-    </tr>
-
-    `).join('')
-   }
-
-  </tbody>
-
- </table>
-
-</div>
-
-
-<div class="controls">
-
- <button
-  class="addrow"
-  onclick="addRow(${pi})">
-  ＋ Tambah Baris
- </button>
 
 </div>
 ```
@@ -1038,13 +794,223 @@ return `
 
 `;
 
+}
+
+const isFinance=
+p.type==='finance';
+
+const tableClass=
+isFinance
+? 'finance-table'
+: (
+tableHasContent(pi)
+? 'has-content'
+: ''
+);
+
+const maxCols=
+isFinance
+? FINANCE_COLUMNS
+: MAX_NORMAL_TABLE_COLUMNS;
+
+return `
+
+  <section class="page">
+
+   <div class="pagehead">
+
+```
+<strong>
+ Halaman ${pi+1}
+</strong>
+
+<div class="pageActions">
+
+ <button
+  class="moveUp"
+  onclick="movePageUp(${pi})"
+  ${pi===0?'disabled':''}>
+  ↑ Naik
+ </button>
+
+ <button
+  class="moveDown"
+  onclick="movePageDown(${pi})"
+  ${pi===data.pages.length-1?'disabled':''}>
+  ↓ Turun
+ </button>
+
+ <button
+  class="deletePage"
+  onclick="deletePage(${pi})">
+  Hapus Halaman
+ </button>
+
+</div>
+```
+
+   </div>
+
+   <div class="field">
+
+```
+<label>
+ ${isFinance?'Judul Tabel Keuangan':'Judul Tabel'}
+</label>
+
+<input
+ value="${esc(p.judul)}"
+ oninput="
+  data.pages[${pi}].judul=this.value
+ ">
+```
+
+   </div>
+
+   <div class="grid">
+
+```
+<div class="field">
+
+ <label>Jumlah Kolom</label>
+
+ <input
+  type="number"
+  min="${isFinance?FINANCE_COLUMNS:1}"
+  max="${maxCols}"
+  value="${p.columns.length}"
+  ${isFinance?'readonly':''}
+  onchange="
+   setCols(${pi},this.value)
+  ">
+
+</div>
+
+<div class="field">
+
+ <label>Durasi (detik)</label>
+
+ <input
+  type="number"
+  min="1"
+  value="${p.durasi}"
+  oninput="
+   data.pages[${pi}].durasi=
+   Math.max(
+    1,
+    Number(this.value)||1
+   )
+  ">
+
+</div>
+```
+
+   </div>
+
+   <div class="tablewrap">
+
+```
+<table
+ data-page="${pi}"
+ class="${tableClass}">
+
+ <thead>
+
+  <tr>
+
+   ${
+    p.columns.map((h,ci)=>`
+
+    <th>
+
+     <input
+      value="${esc(h)}"
+      oninput="
+       data.pages[${pi}].columns[${ci}]=this.value;
+       updateTableSizing(${pi})
+      ">
+
+    </th>
+
+    `).join('')
+   }
+
+   <th class="action">
+    X
+   </th>
+
+  </tr>
+
+ </thead>
+
+ <tbody>
+
+  ${
+   p.rows.map((r,ri)=>`
+
+   <tr>
+
+    ${
+     r.map((v,ci)=>`
+
+     <td>
+
+      <input
+       value="${esc(v)}"
+       oninput="
+        data.pages[${pi}].rows[${ri}][${ci}]=this.value;
+        updateTableSizing(${pi})
+       ">
+
+     </td>
+
+     `).join('')
+    }
+
+    <td class="action">
+
+     <button
+      class="deleteRow"
+      title="Hapus baris"
+      onclick="
+       deleteRow(${pi},${ri})
+      ">
+      X
+     </button>
+
+    </td>
+
+   </tr>
+
+   `).join('')
+  }
+
+ </tbody>
+
+</table>
+```
+
+   </div>
+
+   <div class="controls">
+
+```
+<button
+ class="addrow"
+ onclick="addRow(${pi})">
+ ＋ Tambah Baris
+</button>
+```
+
+   </div>
+
+  </section>
+
+`;
+
 }).join('');
 
 }
-
-/* =====================================================
-TAMBAH HALAMAN
-===================================================== */
 
 function addPage(){
 
@@ -1072,7 +1038,7 @@ TABEL </button>
 <button
  class="btnFinance"
  onclick="buatHalamanFinance()">
-KEUANGAN </button>
+FINANCE </button>
 
 <button
  class="btnCancel"
@@ -1084,10 +1050,6 @@ BATAL </button>
 `;
 
 }
-
-/* =====================================================
-BUAT TEXT
-===================================================== */
 
 function buatHalamanText(){
 
@@ -1110,10 +1072,6 @@ durasi:10
 render();
 
 }
-
-/* =====================================================
-BUAT TABEL
-===================================================== */
 
 function buatHalamanTabel(){
 
@@ -1145,10 +1103,6 @@ render();
 
 }
 
-/* =====================================================
-BUAT FINANCE
-===================================================== */
-
 function buatHalamanFinance(){
 
 const number=
@@ -1159,15 +1113,15 @@ data.pages.push({
 type:'finance',
 
 judul:
-'Halaman '+number,
+'Keuangan',
 
 durasi:10,
 
 columns:[
-'Kolom 1',
-'Kolom 2',
-'Kolom 3',
-'Kolom 4'
+'No',
+'Keterangan',
+'Pemasukan',
+'Pengeluaran'
 ],
 
 rows:[
@@ -1179,10 +1133,6 @@ rows:[
 render();
 
 }
-
-/* =====================================================
-HAPUS HALAMAN
-===================================================== */
 
 function deletePage(i){
 
@@ -1197,10 +1147,6 @@ render();
 }
 
 }
-
-/* =====================================================
-TAMBAH BARIS
-===================================================== */
 
 function addRow(pi){
 
@@ -1217,10 +1163,6 @@ render();
 
 }
 
-/* =====================================================
-HAPUS BARIS
-===================================================== */
-
 function deleteRow(pi,ri){
 
 data.pages[pi].rows.splice(
@@ -1232,25 +1174,47 @@ render();
 
 }
 
-/* =====================================================
-UBAH JUMLAH KOLOM
-===================================================== */
-
 function setCols(pi,val){
 
 const p=
 data.pages[pi];
 
-const max=
-p.type==='finance'
-? FINANCE_COLUMNS
-: MAX_NORMAL_TABLE_COLUMNS;
+if(p.type==='finance'){
+
+p.columns=[
+'No',
+'Keterangan',
+'Pemasukan',
+'Pengeluaran'
+];
+
+p.rows.forEach(row=>{
+
+row.length=FINANCE_COLUMNS;
+
+while(
+row.length<FINANCE_COLUMNS
+){
+
+```
+row.push('');
+```
+
+}
+
+});
+
+render();
+
+return;
+
+}
 
 let n=
 Math.max(
 1,
 Math.min(
-max,
+MAX_NORMAL_TABLE_COLUMNS,
 parseInt(val)||1
 )
 );
@@ -1288,15 +1252,13 @@ render();
 }
 
 /* =====================================================
-PENCARIAN TAMPILATOR OTOMATIS
+PENCARIAN OTOMATIS TAMPILATOR
 ===================================================== */
 
 let tvBoxUrl='';
 
 function url(){
-
 return tvBoxUrl;
-
 }
 
 async function probe(host){
@@ -1305,19 +1267,14 @@ try{
 
 const r=
 await fetch(
-'http://'+
-host+
-':8080/Get_Data?t='+
-Date.now(),
+'http://'+host+':8080/Get_Data?t='+Date.now(),
 {
 method:'GET',
 cache:'no-store'
 }
 );
 
-if(!r.ok){
-return false;
-}
+if(!r.ok)return false;
 
 const x=
 await r.json();
@@ -1325,9 +1282,7 @@ await r.json();
 return !!(
 x &&
 x.data &&
-Array.isArray(
-x.data.pages
-)
+Array.isArray(x.data.pages)
 );
 
 }catch(e){
@@ -1367,7 +1322,7 @@ const batch=20;
 
 for(
 let i=0;
-i<hosts.length && !found;
+i<hosts.length&&!found;
 i+=batch
 ){
 
@@ -1432,14 +1387,12 @@ AMBIL DATA
 
 async function getData(){
 
-if(!tvBoxUrl){
+if(!url()){
 
 const found=
 await findTVBox();
 
-if(!found){
-return;
-}
+if(!found)return;
 
 }
 
@@ -1518,18 +1471,16 @@ SIMPAN DATA
 
 async function saveData(){
 
-normalize();
-
-if(!tvBoxUrl){
+if(!url()){
 
 const found=
 await findTVBox();
 
-if(!found){
-return;
-}
+if(!found)return;
 
 }
+
+normalize();
 
 setStatus(
 'Menyimpan data ke TV Box...',
