@@ -3,20 +3,17 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Editor Tampilator</title>
 
 <style>
-*{
- box-sizing:border-box
-}
+*{box-sizing:border-box}
 
 body{
  margin:0;
  font-family:Arial,sans-serif;
  background:#f1f3f5;
- color:#222;
- font-size:16px
+ color:#222
 }
 
 header{
@@ -30,7 +27,7 @@ header{
 
 header h1{
  margin:0 0 8px;
- font-size:16px
+ font-size:22px
 }
 
 .server{
@@ -40,22 +37,17 @@ header h1{
  align-items:center
 }
 
-.server input{
- flex:1;
- min-width:240px;
- padding:9px;
- border:0;
- border-radius:5px;
- font-size:16px
-}
-
 button{
  border:0;
  border-radius:5px;
  padding:9px 13px;
  font-weight:bold;
- cursor:pointer;
- font-size:16px
+ cursor:pointer
+}
+
+button:disabled{
+ opacity:.45;
+ cursor:not-allowed
 }
 
 .get{
@@ -74,7 +66,7 @@ button{
 }
 
 .status{
- font-size:16px;
+ font-size:13px;
  margin-top:7px
 }
 
@@ -102,7 +94,7 @@ main{
 }
 
 .pagehead strong{
- font-size:16px
+ font-size:18px
 }
 
 .pageActions{
@@ -157,30 +149,29 @@ textarea{
  gap:12px
 }
 
-
-/* =====================================================
-   AREA TABEL
-   ===================================================== */
-
 .tablewrap{
  overflow:auto;
  border:1px solid #bbb;
- margin-top:12px;
- width:100%
+ margin-top:12px
 }
 
 table{
  border-collapse:collapse;
+ width:100%;
+ min-width:600px;
+ table-layout:fixed
+}
+
+table.has-content{
  width:max-content;
- min-width:100%;
+ min-width:0;
  table-layout:auto
 }
 
 th,td{
  border:1px solid #bbb;
  padding:6px;
- vertical-align:middle;
- white-space:nowrap
+ vertical-align:middle
 }
 
 th{
@@ -192,18 +183,25 @@ th input{
  background:white
 }
 
-th input,
 td input{
- width:140px;
- min-width:100px;
- max-width:500px;
- font-size:16px
+ min-width:80px
+}
+
+table:not(.has-content) th input,
+table:not(.has-content) td input{
+ width:100%
+}
+
+table.has-content th input,
+table.has-content td input{
+ width:auto;
+ min-width:60px;
+ max-width:500px
 }
 
 .action{
  text-align:center;
- width:48px;
- min-width:48px
+ width:48px
 }
 
 .deleteRow{
@@ -213,39 +211,6 @@ td input{
  border-radius:4px;
  font-size:16px
 }
-
-
-/* =====================================================
-   FINANCE
-   ===================================================== */
-
-.financeTable{
- width:max-content;
- min-width:100%
-}
-
-.financeTable th,
-.financeTable td{
- white-space:nowrap
-}
-
-.financeTable th:nth-child(1),
-.financeTable td:nth-child(1){
- min-width:120px
-}
-
-.financeTable th:nth-child(2),
-.financeTable td:nth-child(2){
- min-width:220px
-}
-
-.financeTable th:nth-child(3),
-.financeTable td:nth-child(3),
-.financeTable th:nth-child(4),
-.financeTable td:nth-child(4){
- min-width:140px
-}
-
 
 .controls{
  display:flex;
@@ -272,11 +237,6 @@ td input{
  color:#777
 }
 
-
-/* =====================================================
-   PILIH JENIS HALAMAN
-   ===================================================== */
-
 .chooser{
  background:white;
  border-radius:8px;
@@ -287,7 +247,7 @@ td input{
 }
 
 .chooserTitle{
- font-size:16px;
+ font-size:18px;
  font-weight:bold;
  margin-bottom:15px
 }
@@ -308,7 +268,7 @@ td input{
 }
 
 .btnFinance{
- background:#8e24aa;
+ background:#ef6c00;
  color:white
 }
 
@@ -317,15 +277,37 @@ td input{
  color:white
 }
 
+/* FINANCE */
+
+.finance table{
+ min-width:650px
+}
+
+.finance th{
+ background:#fff3e0
+}
+
+.finance th:nth-child(1),
+.finance td:nth-child(1){
+ min-width:120px
+}
+
+.finance th:nth-child(2),
+.finance td:nth-child(2){
+ min-width:220px
+}
+
+.finance th:nth-child(3),
+.finance td:nth-child(3),
+.finance th:nth-child(4),
+.finance td:nth-child(4){
+ min-width:140px
+}
 
 @media(max-width:650px){
 
  .grid{
   grid-template-columns:1fr
- }
-
- .server input{
-  min-width:100%
  }
 
  .chooser button{
@@ -359,10 +341,9 @@ td input{
 
 <div class="server">
 
-<input
-id="serverUrl"
-value="http://192.168.43.40:8080"
-placeholder="Alamat server TV Box">
+<button class="get" onclick="findTVBox()">
+Cari Tampilator
+</button>
 
 <button class="get" onclick="getData()">
 Ambil Data
@@ -409,7 +390,7 @@ let data={
 
 
 /* =====================================================
-   BATAS KOLOM
+   KONSTANTA
    ===================================================== */
 
 const MAX_NORMAL_TABLE_COLUMNS=4;
@@ -463,7 +444,6 @@ function normalize(){
 
  }
 
-
  data.pages.forEach((p,i)=>{
 
   if(!p || typeof p!=='object'){
@@ -486,17 +466,24 @@ function normalize(){
 
   }
 
-
   p.judul=
    p.judul ||
    p.title ||
    ('Halaman '+(i+1));
 
-
   p.type=
    p.type ||
    'table';
 
+  if(
+   p.type!=='text' &&
+   p.type!=='table' &&
+   p.type!=='finance'
+  ){
+
+   p.type='table';
+
+  }
 
   p.durasi=
    Math.max(
@@ -507,11 +494,6 @@ function normalize(){
     )||10
    );
 
-
-  /* =================================================
-     TEXT
-     ================================================= */
-
   if(p.type==='text'){
 
    p.isi=
@@ -521,97 +503,6 @@ function normalize(){
    return;
 
   }
-
-
-  /* =================================================
-     FINANCE
-     ================================================= */
-
-  if(p.type==='finance'){
-
-   if(!Array.isArray(p.columns)){
-
-    if(Array.isArray(p.headers)){
-
-     p.columns=
-      p.headers.slice(
-       0,
-       FINANCE_COLUMNS
-      );
-
-    }else{
-
-     p.columns=[
-      'Kolom 1',
-      'Kolom 2',
-      'Kolom 3',
-      'Kolom 4'
-     ];
-
-    }
-
-   }
-
-
-   p.columns=
-    p.columns.slice(
-     0,
-     FINANCE_COLUMNS
-    );
-
-
-   while(
-    p.columns.length<
-    FINANCE_COLUMNS
-   ){
-
-    p.columns.push(
-     'Kolom '+
-     (p.columns.length+1)
-    );
-
-   }
-
-
-   if(!Array.isArray(p.rows)){
-
-    p.rows=[];
-
-   }
-
-
-   p.rows=
-    p.rows.map(row=>{
-
-     if(!Array.isArray(row)){
-      row=[];
-     }
-
-     while(
-      row.length<
-      FINANCE_COLUMNS
-     ){
-
-      row.push('');
-
-     }
-
-     return row.slice(
-      0,
-      FINANCE_COLUMNS
-     );
-
-    });
-
-
-   return;
-
-  }
-
-
-  /* =================================================
-     TABLE NORMAL
-     ================================================= */
 
   if(!Array.isArray(p.columns)){
 
@@ -632,29 +523,33 @@ function normalize(){
 
   }
 
+  const maxCols=
+   p.type==='finance'
+   ? FINANCE_COLUMNS
+   : MAX_NORMAL_TABLE_COLUMNS;
+
+  if(p.columns.length>maxCols){
+
+   p.columns=
+    p.columns.slice(0,maxCols);
+
+  }
 
   if(!p.columns.length){
 
-   p.columns=[
-    'Kolom 1'
-   ];
-
-  }
-
-
-  if(
-   p.columns.length>
-   MAX_NORMAL_TABLE_COLUMNS
-  ){
-
    p.columns=
-    p.columns.slice(
-     0,
-     MAX_NORMAL_TABLE_COLUMNS
-    );
+    p.type==='finance'
+    ? [
+       'Kolom 1',
+       'Kolom 2',
+       'Kolom 3',
+       'Kolom 4'
+      ]
+    : [
+       'Kolom 1'
+      ];
 
   }
-
 
   if(!Array.isArray(p.rows)){
 
@@ -662,31 +557,29 @@ function normalize(){
 
   }
 
+  p.rows=p.rows.map(row=>{
 
-  p.rows=
-   p.rows.map(row=>{
+   if(!Array.isArray(row)){
 
-    if(!Array.isArray(row)){
-     row=[];
-    }
+    row=[];
 
+   }
 
-    while(
-     row.length<
-     p.columns.length
-    ){
+   while(
+    row.length<
+    p.columns.length
+   ){
 
-     row.push('');
+    row.push('');
 
-    }
+   }
 
+   return row.slice(
+    0,
+    p.columns.length
+   );
 
-    return row.slice(
-     0,
-     p.columns.length
-    );
-
-   });
+  });
 
  });
 
@@ -694,7 +587,91 @@ function normalize(){
 
 
 /* =====================================================
-   PINDAH HALAMAN KE ATAS
+   CEK ISI TABEL
+   ===================================================== */
+
+function tableHasContent(pi){
+
+ const p=
+  data.pages[pi];
+
+ if(
+  !p ||
+  p.type==='text'
+ ){
+  return false;
+ }
+
+ for(const h of p.columns){
+
+  if(
+   String(h??'').trim()!=='' &&
+   !/^Kolom \d+$/.test(
+    String(h).trim()
+   )
+  ){
+
+   return true;
+
+  }
+
+ }
+
+ for(const row of p.rows){
+
+  for(const value of row){
+
+   if(
+    String(value??'').trim()!==''
+   ){
+
+    return true;
+
+   }
+
+  }
+
+ }
+
+ return false;
+
+}
+
+
+/* =====================================================
+   UPDATE LEBAR TABEL
+   ===================================================== */
+
+function updateTableSizing(pi){
+
+ const table=
+  document.querySelector(
+   `table[data-page="${pi}"]`
+  );
+
+ if(!table){
+  return;
+ }
+
+ if(tableHasContent(pi)){
+
+  table.classList.add(
+   'has-content'
+  );
+
+ }else{
+
+  table.classList.remove(
+   'has-content'
+  );
+
+ }
+
+}
+
+
+/* =====================================================
+   PINDAH HALAMAN
    ===================================================== */
 
 function movePageUp(i){
@@ -716,10 +693,6 @@ function movePageUp(i){
 
 }
 
-
-/* =====================================================
-   PINDAH HALAMAN KE BAWAH
-   ===================================================== */
 
 function movePageDown(i){
 
@@ -752,7 +725,6 @@ function render(){
  const root=
   document.getElementById('pages');
 
-
  if(!data.pages.length){
 
   root.innerHTML=
@@ -764,114 +736,110 @@ function render(){
 
  }
 
-
  root.innerHTML=
   data.pages.map((p,pi)=>{
 
+   /* =================================================
+      TEXT
+      ================================================= */
 
-  /* =================================================
-     HALAMAN TEXT
-     ================================================= */
+   if(p.type==='text'){
 
-  if(p.type==='text'){
+    return `
 
-   return `
+    <section class="page">
 
-   <section class="page">
+     <div class="pagehead">
 
-    <div class="pagehead">
+      <strong>
+       Halaman ${pi+1}
+      </strong>
 
-     <strong>
-      Halaman ${pi+1}
-     </strong>
+      <div class="pageActions">
 
-     <div class="pageActions">
+       <button
+        class="moveUp"
+        onclick="movePageUp(${pi})"
+        ${pi===0?'disabled':''}>
+        ↑ Naik
+       </button>
 
-      <button
-       class="moveUp"
-       onclick="movePageUp(${pi})"
-       ${pi===0?'disabled':''}>
-       ↑ Naik
-      </button>
+       <button
+        class="moveDown"
+        onclick="movePageDown(${pi})"
+        ${pi===data.pages.length-1?'disabled':''}>
+        ↓ Turun
+       </button>
 
-      <button
-       class="moveDown"
-       onclick="movePageDown(${pi})"
-       ${pi===data.pages.length-1?'disabled':''}>
-       ↓ Turun
-      </button>
+       <button
+        class="deletePage"
+        onclick="deletePage(${pi})">
+        Hapus Halaman
+       </button>
 
-      <button
-       class="deletePage"
-       onclick="deletePage(${pi})">
-       Hapus Halaman
-      </button>
+      </div>
 
      </div>
 
-    </div>
+     <div class="field">
 
+      <label>Judul</label>
 
-    <div class="field">
+      <input
+       value="${esc(p.judul)}"
+       oninput="
+        data.pages[${pi}].judul=this.value
+       ">
 
-     <label>Judul</label>
+     </div>
 
-     <input
-      value="${esc(p.judul)}"
-      oninput="
-       data.pages[${pi}].judul=this.value
-      ">
+     <div class="field">
 
-    </div>
+      <label>Isi Pengumuman</label>
 
-
-    <div class="field">
-
-     <label>Isi Pengumuman</label>
-
-     <textarea
-      oninput="
-       data.pages[${pi}].isi=this.value
-      ">${esc(p.isi)}</textarea>
+      <textarea
+       oninput="
+        data.pages[${pi}].isi=this.value
+       ">${esc(p.isi)}</textarea>
 
 ```
-</div>
+ </div>
 
+ <div class="field">
 
-<div class="field">
+  <label>Durasi (detik)</label>
 
- <label>Durasi (detik)</label>
+  <input
+   type="number"
+   min="1"
+   value="${p.durasi}"
+   oninput="
+    data.pages[${pi}].durasi=
+    Math.max(
+     1,
+     Number(this.value)||1
+    )
+   ">
 
- <input
-  type="number"
-  min="1"
-  value="${p.durasi}"
-  oninput="
-   data.pages[${pi}].durasi=
-   Math.max(
-    1,
-    Number(this.value)||1
-   )
-  ">
+ </div>
 
-</div>
-```
-
-   </section>
+</section>
 
 `;
+```
 
 }
 
 /* =================================================
-HALAMAN FINANCE
+TABEL / FINANCE
 ================================================= */
 
-if(p.type==='finance'){
+const isFinance=
+p.type==='finance';
 
 return `
 
-   <section class="page">
+   <section class="page ${isFinance?'finance':''}">
 
 ```
 <div class="pagehead">
@@ -909,7 +877,9 @@ return `
 
 <div class="field">
 
- <label>Judul Finance</label>
+ <label>
+  ${isFinance?'Judul Keuangan':'Judul Tabel'}
+ </label>
 
  <input
   value="${esc(p.judul)}"
@@ -920,21 +890,46 @@ return `
 </div>
 
 
-<div class="field">
+<div class="grid">
 
- <label>Durasi (detik)</label>
+ <div class="field">
 
- <input
-  type="number"
-  min="1"
-  value="${p.durasi}"
-  oninput="
-   data.pages[${pi}].durasi=
-   Math.max(
-    1,
-    Number(this.value)||1
-   )
-  ">
+  <label>
+   Jumlah Kolom
+  </label>
+
+  <input
+   type="number"
+   min="${isFinance?4:1}"
+   max="${isFinance?4:4}"
+   value="${p.columns.length}"
+   ${isFinance?'disabled':''}
+   onchange="
+    setCols(${pi},this.value)
+   ">
+
+ </div>
+
+
+ <div class="field">
+
+  <label>
+   Durasi (detik)
+  </label>
+
+  <input
+   type="number"
+   min="1"
+   value="${p.durasi}"
+   oninput="
+    data.pages[${pi}].durasi=
+    Math.max(
+     1,
+     Number(this.value)||1
+    )
+   ">
+
+ </div>
 
 </div>
 
@@ -942,7 +937,12 @@ return `
 <div class="tablewrap">
 
  <table
-  class="financeTable">
+  data-page="${pi}"
+  class="${
+   tableHasContent(pi)
+   ? 'has-content'
+   : ''
+  }">
 
   <thead>
 
@@ -956,7 +956,8 @@ return `
       <input
        value="${esc(h)}"
        oninput="
-        data.pages[${pi}].columns[${ci}]=this.value
+        data.pages[${pi}].columns[${ci}]=this.value;
+        updateTableSizing(${pi})
        ">
 
      </th>
@@ -988,7 +989,8 @@ return `
        <input
         value="${esc(v)}"
         oninput="
-         data.pages[${pi}].rows[${ri}][${ci}]=this.value
+         data.pages[${pi}].rows[${ri}][${ci}]=this.value;
+         updateTableSizing(${pi})
         ">
 
       </td>
@@ -1036,203 +1038,6 @@ return `
 
 `;
 
-}
-
-/* =================================================
-HALAMAN TABEL NORMAL
-================================================= */
-
-return `
-
-  <section class="page">
-
-   <div class="pagehead">
-
-```
-<strong>
- Halaman ${pi+1}
-</strong>
-
-<div class="pageActions">
-
- <button
-  class="moveUp"
-  onclick="movePageUp(${pi})"
-  ${pi===0?'disabled':''}>
-  ↑ Naik
- </button>
-
- <button
-  class="moveDown"
-  onclick="movePageDown(${pi})"
-  ${pi===data.pages.length-1?'disabled':''}>
-  ↓ Turun
- </button>
-
- <button
-  class="deletePage"
-  onclick="deletePage(${pi})">
-  Hapus Halaman
- </button>
-
-</div>
-```
-
-   </div>
-
-   <div class="field">
-
-```
-<label>Judul Tabel</label>
-
-<input
- value="${esc(p.judul)}"
- oninput="
-  data.pages[${pi}].judul=this.value
- ">
-```
-
-   </div>
-
-   <div class="grid">
-
-```
-<div class="field">
-
- <label>Jumlah Kolom</label>
-
- <input
-  type="number"
-  min="1"
-  max="${MAX_NORMAL_TABLE_COLUMNS}"
-  value="${p.columns.length}"
-  onchange="
-   setCols(${pi},this.value)
-  ">
-
-</div>
-
-
-<div class="field">
-
- <label>Durasi (detik)</label>
-
- <input
-  type="number"
-  min="1"
-  value="${p.durasi}"
-  oninput="
-   data.pages[${pi}].durasi=
-   Math.max(
-    1,
-    Number(this.value)||1
-   )
-  ">
-
-</div>
-```
-
-   </div>
-
-   <div class="tablewrap">
-
-```
-<table>
-
- <thead>
-
-  <tr>
-
-   ${
-    p.columns.map((h,ci)=>`
-
-    <th>
-
-     <input
-      value="${esc(h)}"
-      oninput="
-       data.pages[${pi}].columns[${ci}]=this.value
-      ">
-
-    </th>
-
-    `).join('')
-   }
-
-   <th class="action">
-    X
-   </th>
-
-  </tr>
-
- </thead>
-
-
- <tbody>
-
-  ${
-   p.rows.map((r,ri)=>`
-
-   <tr>
-
-    ${
-     r.map((v,ci)=>`
-
-     <td>
-
-      <input
-       value="${esc(v)}"
-       oninput="
-        data.pages[${pi}].rows[${ri}][${ci}]=this.value
-       ">
-
-     </td>
-
-     `).join('')
-    }
-
-
-    <td class="action">
-
-     <button
-      class="deleteRow"
-      title="Hapus baris"
-      onclick="
-       deleteRow(${pi},${ri})
-      ">
-      X
-     </button>
-
-    </td>
-
-   </tr>
-
-   `).join('')
-  }
-
- </tbody>
-
-</table>
-```
-
-   </div>
-
-   <div class="controls">
-
-```
-<button
- class="addrow"
- onclick="addRow(${pi})">
- ＋ Tambah Baris
-</button>
-```
-
-   </div>
-
-  </section>
-
-`;
-
 }).join('');
 
 }
@@ -1267,7 +1072,7 @@ TABEL </button>
 <button
  class="btnFinance"
  onclick="buatHalamanFinance()">
-FINANCE </button>
+KEUANGAN </button>
 
 <button
  class="btnCancel"
@@ -1281,7 +1086,7 @@ BATAL </button>
 }
 
 /* =====================================================
-BUAT HALAMAN TEXT
+BUAT TEXT
 ===================================================== */
 
 function buatHalamanText(){
@@ -1307,7 +1112,7 @@ render();
 }
 
 /* =====================================================
-BUAT HALAMAN TABEL
+BUAT TABEL
 ===================================================== */
 
 function buatHalamanTabel(){
@@ -1341,7 +1146,7 @@ render();
 }
 
 /* =====================================================
-BUAT HALAMAN FINANCE
+BUAT FINANCE
 ===================================================== */
 
 function buatHalamanFinance(){
@@ -1433,17 +1238,22 @@ UBAH JUMLAH KOLOM
 
 function setCols(pi,val){
 
+const p=
+data.pages[pi];
+
+const max=
+p.type==='finance'
+? FINANCE_COLUMNS
+: MAX_NORMAL_TABLE_COLUMNS;
+
 let n=
 Math.max(
 1,
 Math.min(
-MAX_NORMAL_TABLE_COLUMNS,
+max,
 parseInt(val)||1
 )
 );
-
-const p=
-data.pages[pi];
 
 p.columns=
 p.columns.slice(0,n);
@@ -1478,24 +1288,160 @@ render();
 }
 
 /* =====================================================
-ALAMAT SERVER
+PENCARIAN TAMPILATOR OTOMATIS
 ===================================================== */
+
+let tvBoxUrl='';
 
 function url(){
 
-return document
-.getElementById('serverUrl')
-.value
-.trim()
-.replace(//+$/,'');
+return tvBoxUrl;
+
+}
+
+async function probe(host){
+
+try{
+
+const r=
+await fetch(
+'http://'+
+host+
+':8080/Get_Data?t='+
+Date.now(),
+{
+method:'GET',
+cache:'no-store'
+}
+);
+
+if(!r.ok){
+return false;
+}
+
+const x=
+await r.json();
+
+return !!(
+x &&
+x.data &&
+Array.isArray(
+x.data.pages
+)
+);
+
+}catch(e){
+
+return false;
+
+}
+
+}
+
+async function findTVBox(){
+
+setStatus(
+'Mencari Tampilator...',
+true
+);
+
+tvBoxUrl='';
+
+const hosts=[];
+
+for(
+let i=1;
+i<=254;
+i++
+){
+
+hosts.push(
+'192.168.43.'+i
+);
+
+}
+
+let found=false;
+
+const batch=20;
+
+for(
+let i=0;
+i<hosts.length && !found;
+i+=batch
+){
+
+const group=
+hosts.slice(
+i,
+i+batch
+);
+
+const results=
+await Promise.all(
+group.map(
+async h=>({
+h,
+ok:await probe(h)
+})
+)
+);
+
+const hit=
+results.find(
+x=>x.ok
+);
+
+if(hit){
+
+tvBoxUrl=
+'http://'+
+hit.h+
+':8080';
+
+found=true;
+
+}
+
+}
+
+if(found){
+
+setStatus(
+'Tampilator ditemukan: '+
+tvBoxUrl,
+true
+);
+
+return true;
+
+}
+
+setStatus(
+'Tampilator tidak ditemukan. Pastikan HP terhubung ke hotspot TV Box.',
+false
+);
+
+return false;
 
 }
 
 /* =====================================================
-GET DATA
+AMBIL DATA
 ===================================================== */
 
 async function getData(){
+
+if(!tvBoxUrl){
+
+const found=
+await findTVBox();
+
+if(!found){
+return;
+}
+
+}
 
 setStatus(
 'Mengambil data dari TV Box...',
@@ -1574,6 +1520,17 @@ async function saveData(){
 
 normalize();
 
+if(!tvBoxUrl){
+
+const found=
+await findTVBox();
+
+if(!found){
+return;
+}
+
+}
+
 setStatus(
 'Menyimpan data ke TV Box...',
 true
@@ -1634,7 +1591,7 @@ true
 console.error(e);
 
 setStatus(
-'Simpan gagal: '+
+'Simpan Data gagal: '+
 e.message,
 false
 );
@@ -1648,6 +1605,8 @@ MULAI
 ===================================================== */
 
 render();
+
+findTVBox();
 
 </script>
 
