@@ -194,8 +194,7 @@ body {
 }
 
 .form-group input,
-.form-group textarea,
-.form-group select {
+.form-group textarea {
     width: 100%;
     padding: 15px;
     font-size: 20px;
@@ -210,8 +209,7 @@ body {
 }
 
 .form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
+.form-group textarea:focus {
     outline: none;
     border-color: #1a5c99;
 }
@@ -279,6 +277,37 @@ body {
     background: #eef;
 }
 
+.th-aksi {
+    background: #1a5c99;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    width: 50px;
+}
+
+.td-aksi {
+    width: 50px;
+    text-align: center;
+    background: #cc3333;
+    padding: 0;
+}
+
+.btn-x {
+    background: #cc3333;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.btn-x:active {
+    background: #aa2222;
+}
+
 .aksi-baris {
     display: flex;
     gap: 8px;
@@ -303,7 +332,6 @@ body {
     font-size: 18px;
 }
 
-/* Modal dialog untuk tambah halaman */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -389,7 +417,6 @@ body {
 
 <button class="btn-tambah" id="btn-tambah" onclick="tampilkanTambah()">+ TAMBAH HALAMAN</button>
 
-<!-- Form Edit -->
 <div class="form-overlay" id="form-overlay">
     <div class="form-kotak">
         <h2 id="form-judul">EDIT HALAMAN</h2>
@@ -401,7 +428,6 @@ body {
     </div>
 </div>
 
-<!-- Modal Tambah Halaman -->
 <div class="modal-overlay" id="modal-tambah">
     <div class="modal-kotak">
         <h2>Pilih Jenis Halaman</h2>
@@ -426,23 +452,17 @@ body {
 </div>
 
 <script>
-// ==================== KONFIGURASI ====================
 var SERVER_PORT = 8080;
 var serverIP = "192.168.43.1";
 var ipTerdeteksi = false;
-
-// ==================== VARIABEL ====================
 var currentData = null;
 var editIndex = -1;
 
-// ==================== BACA GATEWAY ====================
 function getGatewayIP() {
     try {
         if (window.AndroidBridge && typeof window.AndroidBridge.getTvBoxIp === "function") {
             var ip = window.AndroidBridge.getTvBoxIp();
-            if (ip && ip.length > 0) {
-                return ip;
-            }
+            if (ip && ip.length > 0) return ip;
         }
     } catch (e) {
         console.log("AndroidBridge error: " + e.message);
@@ -461,19 +481,17 @@ function deteksiIP() {
         el.style.color = "#0d8033";
         el.style.fontWeight = "bold";
     } else {
-        el.textContent = "IP default: " + serverIP + ":" + SERVER_PORT + " (TV Box tidak terdeteksi)";
+        el.textContent = "IP default: " + serverIP + ":" + SERVER_PORT;
         el.style.color = "#cc3333";
     }
 }
 
-// ==================== STATUS ====================
 function setStatus(pesan, warna) {
     var el = document.getElementById("status");
     el.textContent = pesan;
     el.className = "status " + (warna || "");
 }
 
-// ==================== AMBIL DATA ====================
 function ambilData() {
     setStatus("Mengambil data...", "biru");
     
@@ -486,8 +504,6 @@ function ambilData() {
                     currentData = data;
                     setStatus("Data diambil: " + data.pengumuman.length + " halaman", "hijau");
                     tampilkanDaftar();
-                    
-                    // Aktifkan tombol
                     document.getElementById("btn-kirim").disabled = false;
                     document.getElementById("btn-tambah").style.display = "block";
                 } else {
@@ -499,11 +515,9 @@ function ambilData() {
         })
         .catch(function(err) {
             setStatus("GAGAL KONEKSI: pastikan HP terhubung ke WiFi TV Box", "merah");
-            console.log(err);
         });
 }
 
-// ==================== KIRIM DATA ====================
 function kirimData() {
     if (!currentData || !currentData.pengumuman) {
         setStatus("Belum ada data", "merah");
@@ -522,8 +536,6 @@ function kirimData() {
         setStatus("Data BERHASIL dikirim! Editor di-reset.", "hijau");
         currentData = null;
         document.getElementById("daftar-halaman").innerHTML = "";
-        
-        // Disable tombol
         document.getElementById("btn-kirim").disabled = true;
         document.getElementById("btn-tambah").style.display = "none";
     })
@@ -532,7 +544,6 @@ function kirimData() {
     });
 }
 
-// ==================== TAMPILKAN DAFTAR ====================
 function tampilkanDaftar() {
     if (!currentData) return;
     
@@ -570,7 +581,6 @@ function namaTipe(tipe) {
     return tipe;
 }
 
-// ==================== FORM EDIT ====================
 function bukaForm(index) {
     if (!currentData || !currentData.pengumuman[index]) return;
     
@@ -603,7 +613,6 @@ function bukaForm(index) {
     info.textContent = "Jenis: " + namaTipe(page.type);
     isi.appendChild(info);
     
-    // Tombol urutan
     var urutan = document.createElement("div");
     urutan.className = "urutan-tombol";
     
@@ -681,6 +690,7 @@ function buatTabelEditor(page) {
     
     var thead = document.createElement("thead");
     var trHead = document.createElement("tr");
+    
     page.headers.forEach(function(h, i) {
         var th = document.createElement("th");
         var input = document.createElement("input");
@@ -690,6 +700,13 @@ function buatTabelEditor(page) {
         th.appendChild(input);
         trHead.appendChild(th);
     });
+    
+    // Header untuk kolom aksi
+    var thAksi = document.createElement("th");
+    thAksi.className = "th-aksi";
+    thAksi.textContent = "✕";
+    trHead.appendChild(thAksi);
+    
     thead.appendChild(trHead);
     table.appendChild(thead);
     
@@ -697,6 +714,7 @@ function buatTabelEditor(page) {
     
     page.rows.forEach(function(row, r) {
         var tr = document.createElement("tr");
+        
         row.forEach(function(cell, c) {
             var td = document.createElement("td");
             var input = document.createElement("input");
@@ -707,11 +725,33 @@ function buatTabelEditor(page) {
             td.appendChild(input);
             tr.appendChild(td);
         });
+        
+        // Kolom aksi dengan tombol X
+        var tdAksi = document.createElement("td");
+        tdAksi.className = "td-aksi";
+        
+        var btnX = document.createElement("button");
+        btnX.className = "btn-x";
+        btnX.textContent = "✕";
+        btnX.onclick = function() {
+            simpanFormData();
+            if (page.rows.length > 1) {
+                page.rows.splice(r, 1);
+                bukaForm(editIndex);
+            } else {
+                alert("Minimal harus ada 1 baris");
+            }
+        };
+        tdAksi.appendChild(btnX);
+        tr.appendChild(tdAksi);
+        
         tbody.appendChild(tr);
     });
+    
     table.appendChild(tbody);
     div.appendChild(table);
     
+    // Tombol tambah baris
     var aksi = document.createElement("div");
     aksi.className = "aksi-baris";
     
@@ -727,24 +767,12 @@ function buatTabelEditor(page) {
         bukaForm(editIndex);
     };
     
-    var btnHapusBaris = document.createElement("button");
-    btnHapusBaris.className = "btn btn-merah";
-    btnHapusBaris.textContent = "− HAPUS BARIS";
-    btnHapusBaris.onclick = function() {
-        if (page.rows.length > 1) {
-            page.rows.pop();
-            bukaForm(editIndex);
-        }
-    };
-    
     aksi.appendChild(btnTambah);
-    aksi.appendChild(btnHapusBaris);
     div.appendChild(aksi);
     
     return div;
 }
 
-// ==================== SIMPAN FORM ====================
 function simpanFormData() {
     if (!currentData || editIndex < 0) return;
     
@@ -791,7 +819,6 @@ function tutupForm() {
     editIndex = -1;
 }
 
-// ==================== URUTKAN ====================
 function urutkan(index, arah) {
     simpanFormData();
     
@@ -807,7 +834,6 @@ function urutkan(index, arah) {
     setStatus("Urutan diubah", "hijau");
 }
 
-// ==================== HAPUS ====================
 function hapusHalaman(index) {
     if (!confirm("Hapus halaman " + (index + 1) + "?")) return;
     
@@ -817,7 +843,6 @@ function hapusHalaman(index) {
     setStatus("Halaman dihapus", "hijau");
 }
 
-// ==================== TAMBAH HALAMAN ====================
 function tampilkanTambah() {
     if (!currentData) {
         setStatus("Ambil data dulu", "merah");
@@ -863,7 +888,6 @@ function pilihTipe(jenis) {
     setStatus("Halaman ditambahkan", "hijau");
 }
 
-// ==================== INIT ====================
 window.addEventListener("load", function() {
     deteksiIP();
 });
