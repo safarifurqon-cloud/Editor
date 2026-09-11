@@ -58,6 +58,12 @@ body {
     transform: scale(0.97);
 }
 
+.btn:disabled {
+    background: #999 !important;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
 .btn-ambil {
     background: #1a5c99;
 }
@@ -142,6 +148,7 @@ body {
     margin-top: 15px;
     width: 100%;
     box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    display: none;
 }
 
 .form-overlay {
@@ -187,7 +194,8 @@ body {
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 15px;
     font-size: 20px;
@@ -202,7 +210,8 @@ body {
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
     border-color: #1a5c99;
 }
@@ -293,6 +302,72 @@ body {
     padding: 15px;
     font-size: 18px;
 }
+
+/* Modal dialog untuk tambah halaman */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    padding: 20px;
+}
+
+.modal-overlay.aktif {
+    display: block;
+}
+
+.modal-kotak {
+    background: #fff;
+    border-radius: 15px;
+    padding: 25px;
+    max-width: 500px;
+    margin: 100px auto;
+}
+
+.modal-kotak h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-pilihan {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modal-pilihan button {
+    padding: 25px;
+    font-size: 20px;
+    font-weight: bold;
+    border: 2px solid #1a5c99;
+    background: #fff;
+    color: #1a5c99;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.modal-pilihan button:active {
+    background: #1a5c99;
+    color: #fff;
+}
+
+.modal-pilihan button .keterangan {
+    display: block;
+    font-size: 14px;
+    font-weight: normal;
+    color: #666;
+    margin-top: 5px;
+}
+
+.modal-pilihan button:active .keterangan {
+    color: #ddd;
+}
 </style>
 </head>
 <body>
@@ -303,8 +378,8 @@ body {
 </div>
 
 <div class="tombol-utama">
-    <button class="btn btn-ambil" onclick="ambilData()">AMBIL DATA</button>
-    <button class="btn btn-kirim" onclick="kirimData()">KIRIM DATA</button>
+    <button class="btn btn-ambil" id="btn-ambil" onclick="ambilData()">AMBIL DATA</button>
+    <button class="btn btn-kirim" id="btn-kirim" onclick="kirimData()" disabled>KIRIM DATA</button>
 </div>
 
 <div class="status" id="status">Tekan AMBIL DATA untuk mulai</div>
@@ -312,8 +387,9 @@ body {
 <div class="label">DAFTAR HALAMAN</div>
 <div class="daftar-halaman" id="daftar-halaman"></div>
 
-<button class="btn-tambah" onclick="tampilkanTambah()">+ TAMBAH HALAMAN</button>
+<button class="btn-tambah" id="btn-tambah" onclick="tampilkanTambah()">+ TAMBAH HALAMAN</button>
 
+<!-- Form Edit -->
 <div class="form-overlay" id="form-overlay">
     <div class="form-kotak">
         <h2 id="form-judul">EDIT HALAMAN</h2>
@@ -321,6 +397,30 @@ body {
         <div class="form-tombol">
             <button class="btn btn-kirim" onclick="simpanForm()">SIMPAN</button>
             <button class="btn btn-merah" onclick="tutupForm()">TUTUP</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Tambah Halaman -->
+<div class="modal-overlay" id="modal-tambah">
+    <div class="modal-kotak">
+        <h2>Pilih Jenis Halaman</h2>
+        <div class="modal-pilihan">
+            <button onclick="pilihTipe('pengumuman')">
+                📝 Pengumuman Biasa
+                <span class="keterangan">Untuk pengumuman, jadwal, aturan masjid, dll.</span>
+            </button>
+            <button onclick="pilihTipe('tabel')">
+                📊 Tabel Data
+                <span class="keterangan">Untuk daftar nama, peserta qurban, donatur, dll.</span>
+            </button>
+            <button onclick="pilihTipe('keuangan')">
+                💰 Laporan Keuangan
+                <span class="keterangan">Untuk laporan pemasukan dan pengeluaran.</span>
+            </button>
+            <button onclick="tutupModalTambah()" style="border-color: #cc3333; color: #cc3333;">
+                ✕ Batal
+            </button>
         </div>
     </div>
 </div>
@@ -386,6 +486,10 @@ function ambilData() {
                     currentData = data;
                     setStatus("Data diambil: " + data.pengumuman.length + " halaman", "hijau");
                     tampilkanDaftar();
+                    
+                    // Aktifkan tombol
+                    document.getElementById("btn-kirim").disabled = false;
+                    document.getElementById("btn-tambah").style.display = "block";
                 } else {
                     setStatus("Data tidak valid", "merah");
                 }
@@ -418,6 +522,10 @@ function kirimData() {
         setStatus("Data BERHASIL dikirim! Editor di-reset.", "hijau");
         currentData = null;
         document.getElementById("daftar-halaman").innerHTML = "";
+        
+        // Disable tombol
+        document.getElementById("btn-kirim").disabled = true;
+        document.getElementById("btn-tambah").style.display = "none";
     })
     .catch(function(err) {
         setStatus("GAGAL KIRIM: " + err.message, "merah");
@@ -446,13 +554,20 @@ function tampilkanDaftar() {
         
         var tipe = document.createElement("div");
         tipe.className = "tipe";
-        tipe.textContent = page.type || "-";
+        tipe.textContent = namaTipe(page.type);
         
         div.appendChild(nomor);
         div.appendChild(judul);
         div.appendChild(tipe);
         container.appendChild(div);
     });
+}
+
+function namaTipe(tipe) {
+    if (tipe === "text_pendek" || tipe === "text_panjang") return "Pengumuman";
+    if (tipe === "tabel_pendek" || tipe === "tabel_panjang") return "Tabel";
+    if (tipe === "tabel_keuangan") return "Keuangan";
+    return tipe;
 }
 
 // ==================== FORM EDIT ====================
@@ -485,7 +600,7 @@ function bukaForm(index) {
     
     var info = document.createElement("div");
     info.className = "info-tipe";
-    info.textContent = "Tipe: " + page.type;
+    info.textContent = "Jenis: " + namaTipe(page.type);
     isi.appendChild(info);
     
     // Tombol urutan
@@ -709,43 +824,34 @@ function tampilkanTambah() {
         return;
     }
     
-    var pilihan = prompt(
-        "Pilih tipe halaman:\n\n" +
-        "1 = Text Pendek\n" +
-        "2 = Text Panjang\n" +
-        "3 = Tabel Pendek\n" +
-        "4 = Tabel Panjang\n" +
-        "5 = Tabel Keuangan\n\n" +
-        "Ketik angka (1-5):"
-    );
-    
-    if (!pilihan) return;
-    
-    var tipe = "";
-    if (pilihan === "1") tipe = "text_pendek";
-    else if (pilihan === "2") tipe = "text_panjang";
-    else if (pilihan === "3") tipe = "tabel_pendek";
-    else if (pilihan === "4") tipe = "tabel_panjang";
-    else if (pilihan === "5") tipe = "tabel_keuangan";
-    else {
-        setStatus("Pilihan tidak valid", "merah");
-        return;
-    }
+    document.getElementById("modal-tambah").classList.add("aktif");
+}
+
+function tutupModalTambah() {
+    document.getElementById("modal-tambah").classList.remove("aktif");
+}
+
+function pilihTipe(jenis) {
+    tutupModalTambah();
     
     var newPage = {
         id: Date.now(),
-        type: tipe,
-        judul: "Judul Baru",
         durasi: 10
     };
     
-    if (tipe === "text_pendek" || tipe === "text_panjang") {
-        newPage.isi = "Tulis isi di sini";
-    } else if (tipe === "tabel_pendek" || tipe === "tabel_panjang") {
+    if (jenis === "pengumuman") {
+        newPage.type = "text_panjang";
+        newPage.judul = "Pengumuman Baru";
+        newPage.isi = "Tulis isi pengumuman di sini";
+    } else if (jenis === "tabel") {
+        newPage.type = "tabel_panjang";
+        newPage.judul = "Tabel Baru";
         newPage.jumlah_kolom = 3;
         newPage.headers = ["Kolom 1", "Kolom 2", "Kolom 3"];
         newPage.rows = [["", "", ""]];
-    } else if (tipe === "tabel_keuangan") {
+    } else if (jenis === "keuangan") {
+        newPage.type = "tabel_keuangan";
+        newPage.judul = "Laporan Keuangan";
         newPage.saldo_awal = 0;
         newPage.jumlah_kolom = 4;
         newPage.headers = ["Tanggal", "Uraian", "Pemasukan", "Pengeluaran"];
