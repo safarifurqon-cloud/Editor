@@ -1,1564 +1,766 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EDITOR-TEST-123</title>
-
+<title>Tampilator Editor</title>
 <style>
-*{box-sizing:border-box}
-
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#f1f3f5;
- color:#222
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-header{
- background:#155d35;
- color:white;
- padding:14px 16px;
- position:sticky;
- top:0;
- z-index:20
+body {
+    background: #d9dde3;
+    color: #000;
+    padding: 15px;
+    padding-bottom: 100px;
+    font-size: 18px;
 }
 
-header h1{
- margin:0 0 8px;
- font-size:22px
+.header {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.server{
- display:flex;
- gap:8px;
- flex-wrap:wrap;
- align-items:center
+.header h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
-button{
- border:0;
- border-radius:5px;
- padding:9px 13px;
- font-weight:bold;
- cursor:pointer
+.header .ip-info {
+    font-size: 16px;
+    color: #555;
 }
 
-button:disabled{
- opacity:.45;
- cursor:not-allowed
+.tombol-utama {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-.get{
- background:#f6c344
+.btn {
+    flex: 1;
+    padding: 25px 15px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 }
 
-.save{
- background:#43a047;
- color:white
+.btn:active {
+    transform: scale(0.97);
 }
 
-.addpage{
- background:#1976d2;
- color:white;
- margin-top:5px
+.btn-ambil {
+    background: #1a5c99;
 }
 
-.status{
- font-size:13px;
- margin-top:7px
+.btn-kirim {
+    background: #0d8033;
 }
 
-main{
- max-width:1100px;
- margin:16px auto;
- padding:0 10px
+.btn-merah {
+    background: #cc3333;
 }
 
-.page{
- background:white;
- border-radius:8px;
- margin-bottom:18px;
- padding:15px;
- box-shadow:0 1px 5px #bbb
+.status {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    min-height: 30px;
+    text-align: center;
+    border: 1px solid #aaa;
 }
 
-.pagehead{
- display:flex;
- justify-content:space-between;
- gap:10px;
- align-items:center;
- border-bottom:1px solid #ddd;
- padding-bottom:10px
+.status.hijau { color: #0d8033; }
+.status.merah { color: #cc3333; }
+.status.biru { color: #1a5c99; }
+
+.label {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 20px 0 10px 0;
 }
 
-.pagehead strong{
- font-size:18px
+.daftar-halaman {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.pageActions{
- display:flex;
- gap:5px;
- flex-wrap:wrap;
- justify-content:flex-end
+.halaman-item {
+    background: #fff;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.pageActions button{
- color:white
+.halaman-item:active {
+    background: #eee;
 }
 
-.moveUp{
- background:#1565c0
+.halaman-item .nomor {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 5px;
 }
 
-.moveDown{
- background:#6a1b9a
+.halaman-item .judul {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    word-wrap: break-word;
 }
 
-.deletePage{
- background:#c62828
+.halaman-item .tipe {
+    font-size: 14px;
+    color: #888;
+    font-style: italic;
 }
 
-.field{
- margin-top:12px
+.btn-tambah {
+    background: #0d8033;
+    color: #fff;
+    border: none;
+    padding: 25px;
+    font-size: 22px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 100%;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 }
 
-label{
- display:block;
- font-weight:bold;
- margin-bottom:5px
+.form-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    overflow-y: auto;
+    padding: 20px;
 }
 
-input,textarea{
- width:100%;
- padding:9px;
- border:1px solid #aaa;
- border-radius:5px;
- font-size:15px
+.form-overlay.aktif {
+    display: block;
 }
 
-textarea{
- min-height:90px;
- resize:vertical
+.form-kotak {
+    background: #fff;
+    border-radius: 15px;
+    padding: 25px;
+    max-width: 600px;
+    margin: 20px auto;
 }
 
-.grid{
- display:grid;
- grid-template-columns:1fr 150px;
- gap:12px
+.form-kotak h2 {
+    font-size: 26px;
+    margin-bottom: 25px;
+    text-align: center;
 }
 
-.tablewrap{
- overflow:auto;
- border:1px solid #bbb;
- margin-top:12px
+.form-group {
+    margin-bottom: 20px;
 }
 
-table{
- border-collapse:collapse;
- width:100%;
- min-width:650px;
- table-layout:fixed
+.form-group label {
+    display: block;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
 }
 
-table.has-content{
- width:max-content;
- min-width:0;
- table-layout:auto
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 15px;
+    font-size: 20px;
+    border: 2px solid #aaa;
+    border-radius: 8px;
+    font-family: inherit;
 }
 
-table.finance-table{
- width:100%;
- min-width:700px;
- table-layout:fixed
+.form-group textarea {
+    min-height: 150px;
+    resize: vertical;
 }
 
-th,td{
- border:1px solid #bbb;
- padding:6px;
- vertical-align:middle
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #1a5c99;
 }
 
-th{
- background:#e8f5e9
+.info-tipe {
+    text-align: center;
+    font-size: 16px;
+    color: #777;
+    margin: 15px 0;
+    font-style: italic;
 }
 
-.finance-table th{
- background:#e8f5e9
+.form-tombol {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
 }
 
-th input{
- font-weight:bold;
- background:white
+.form-tombol .btn {
+    flex: 1;
+    padding: 20px 10px;
+    font-size: 20px;
 }
 
-td input{
- min-width:80px
+.tabel-editor {
+    margin-top: 15px;
+    overflow-x: auto;
 }
 
-table:not(.has-content) th input,
-table:not(.has-content) td input{
- width:100%
+.tabel-editor table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
 }
 
-table.has-content th input,
-table.has-content td input{
- width:auto;
- min-width:60px;
- max-width:500px
+.tabel-editor th {
+    background: #1a5c99;
+    color: #fff;
+    padding: 0;
+    font-weight: bold;
+    text-align: left;
 }
 
-.finance-table th input,
-.finance-table td input{
- width:100%;
- min-width:0;
- max-width:none
+.tabel-editor td {
+    border: 1px solid #ccc;
+    padding: 0;
 }
 
-.finance-table th:nth-child(1),
-.finance-table td:nth-child(1){
- width:15%
+.tabel-editor input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    font-size: 16px;
+    font-family: inherit;
+    background: transparent;
 }
 
-.finance-table th:nth-child(2),
-.finance-table td:nth-child(2){
- width:45%
+.tabel-editor th input {
+    color: #fff;
+    font-weight: bold;
 }
 
-.finance-table th:nth-child(3),
-.finance-table td:nth-child(3),
-.finance-table th:nth-child(4),
-.finance-table td:nth-child(4){
- width:20%
+.tabel-editor input:focus {
+    outline: 2px solid #1a5c99;
+    background: #eef;
 }
 
-.finance-table td:nth-child(3) input,
-.finance-table td:nth-child(4) input{
- text-align:right;
- white-space:nowrap
+.aksi-baris {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
 }
 
-.action{
- text-align:center;
- width:48px!important
+.aksi-baris .btn {
+    flex: 1;
+    padding: 15px;
+    font-size: 18px;
 }
 
-.deleteRow{
- background:#e53935;
- color:white;
- padding:5px 9px;
- border-radius:4px;
- font-size:16px
+.urutan-tombol {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
 }
 
-.controls{
- display:flex;
- gap:8px;
- flex-wrap:wrap;
- margin-top:10px
-}
-
-.addrow{
- background:#2e7d32;
- color:white
-}
-
-.notice{
- background:#fff8e1;
- border-left:4px solid #f9a825;
- padding:10px;
- margin-bottom:15px
-}
-
-.empty{
- padding:20px;
- text-align:center;
- color:#777
-}
-
-.chooser{
- background:white;
- border-radius:8px;
- margin-bottom:18px;
- padding:20px;
- box-shadow:0 1px 5px #bbb;
- text-align:center
-}
-
-.chooserTitle{
- font-size:18px;
- font-weight:bold;
- margin-bottom:15px
-}
-
-.chooser button{
- margin:4px;
- min-width:150px
-}
-
-.btnText{
- background:#1976d2;
- color:white
-}
-
-.btnTable{
- background:#388e3c;
- color:white
-}
-
-.btnFinance{
- background:#8e6b00;
- color:white
-}
-
-.btnCancel{
- background:#777;
- color:white
-}
-
-@media(max-width:650px){
-
- .grid{
-  grid-template-columns:1fr
- }
-
- .chooser button{
-  width:100%;
-  margin:5px 0
- }
-
- .pagehead{
-  align-items:flex-start
- }
-
- .pageActions{
-  width:100%;
- }
-
- .pageActions button{
-  flex:1;
- }
-
+.urutan-tombol .btn {
+    flex: 1;
+    padding: 15px;
+    font-size: 18px;
 }
 </style>
-
 </head>
-
 <body>
 
-<header>
-
-<h1>EDITOR-TEST-123</h1>
-
-<div class="server">
-
-<button class="get" onclick="findTVBox()">
-Cari Tampilator
-</button>
-
-<button class="get" onclick="getData()">
-Ambil Data
-</button>
-
-<button class="save" onclick="saveData()">
-Simpan Data
-</button>
-
+<div class="header">
+    <h1>TAMPILATOR EDITOR</h1>
+    <div class="ip-info" id="info-ip">Mendeteksi IP...</div>
 </div>
 
-<div id="status" class="status">
-Siap.
+<div class="tombol-utama">
+    <button class="btn btn-ambil" onclick="ambilData()">AMBIL DATA</button>
+    <button class="btn btn-kirim" onclick="kirimData()">KIRIM DATA</button>
 </div>
 
-</header>
+<div class="status" id="status">Tekan AMBIL DATA untuk mulai</div>
 
-<main>
+<div class="label">DAFTAR HALAMAN</div>
+<div class="daftar-halaman" id="daftar-halaman"></div>
 
-<div class="notice">
-<b>Catatan durasi:</b>
-durasi adalah waktu diam untuk satu layar awal.
-Jika tabel lebih panjang dari layar, Tampilator akan diam sesuai durasi,
-kemudian scroll perlahan sampai bawah dan diam 5 detik pada bagian terakhir.
+<button class="btn-tambah" onclick="tampilkanTambah()">+ TAMBAH HALAMAN</button>
+
+<div class="form-overlay" id="form-overlay">
+    <div class="form-kotak">
+        <h2 id="form-judul">EDIT HALAMAN</h2>
+        <div id="form-isi"></div>
+        <div class="form-tombol">
+            <button class="btn btn-kirim" onclick="simpanForm()">SIMPAN</button>
+            <button class="btn btn-merah" onclick="tutupForm()">TUTUP</button>
+        </div>
+    </div>
 </div>
-
-<div id="pages"></div>
-
-<button class="addpage" onclick="addPage()">
-＋ Tambah Halaman
-</button>
-
-</main>
 
 <script>
+// ==================== KONFIGURASI ====================
+var SERVER_PORT = 8080;
+var serverIP = "192.168.43.1";
+var ipTerdeteksi = false;
 
-const MAX_NORMAL_TABLE_COLUMNS=4;
-const FINANCE_COLUMNS=4;
+// ==================== VARIABEL ====================
+var currentData = null;
+var editIndex = -1;
 
-let data={
- pages:[]
-};
-
-function esc(v){
-
- return String(v??'')
-  .replace(/&/g,'&amp;')
-  .replace(/</g,'&lt;')
-  .replace(/>/g,'&gt;')
-  .replace(/"/g,'&quot;');
-
+// ==================== BACA GATEWAY ====================
+function getGatewayIP() {
+    try {
+        if (window.AndroidBridge && typeof window.AndroidBridge.getTvBoxIp === "function") {
+            var ip = window.AndroidBridge.getTvBoxIp();
+            if (ip && ip.length > 0) {
+                return ip;
+            }
+        }
+    } catch (e) {
+        console.log("AndroidBridge error: " + e.message);
+    }
+    return null;
 }
 
-function setStatus(text,ok=true){
-
- const e=document.getElementById('status');
-
- e.textContent=text;
-
- e.style.color=
-  ok
-  ? '#d7ffd9'
-  : '#ffd0d0';
-
+function deteksiIP() {
+    var gateway = getGatewayIP();
+    var el = document.getElementById("info-ip");
+    
+    if (gateway) {
+        serverIP = gateway;
+        ipTerdeteksi = true;
+        el.textContent = "Tersambung ke TV Box: " + serverIP + ":" + SERVER_PORT;
+        el.style.color = "#0d8033";
+        el.style.fontWeight = "bold";
+    } else {
+        el.textContent = "IP default: " + serverIP + ":" + SERVER_PORT + " (TV Box tidak terdeteksi)";
+        el.style.color = "#cc3333";
+    }
 }
 
-function normalize(){
+// ==================== STATUS ====================
+function setStatus(pesan, warna) {
+    var el = document.getElementById("status");
+    el.textContent = pesan;
+    el.className = "status " + (warna || "");
+}
 
- if(!data || !Array.isArray(data.pages)){
+// ==================== AMBIL DATA ====================
+function ambilData() {
+    setStatus("Mengambil data...", "biru");
+    
+    fetch("http://" + serverIP + ":" + SERVER_PORT + "/data")
+        .then(function(response) { return response.text(); })
+        .then(function(text) {
+            try {
+                var data = JSON.parse(text);
+                if (data && data.pengumuman) {
+                    currentData = data;
+                    setStatus("Data diambil: " + data.pengumuman.length + " halaman", "hijau");
+                    tampilkanDaftar();
+                } else {
+                    setStatus("Data tidak valid", "merah");
+                }
+            } catch (e) {
+                setStatus("Error: " + e.message, "merah");
+            }
+        })
+        .catch(function(err) {
+            setStatus("GAGAL KONEKSI: pastikan HP terhubung ke WiFi TV Box", "merah");
+            console.log(err);
+        });
+}
 
-  data={
-   pages:[]
-  };
+// ==================== KIRIM DATA ====================
+function kirimData() {
+    if (!currentData || !currentData.pengumuman) {
+        setStatus("Belum ada data", "merah");
+        return;
+    }
+    
+    setStatus("Mengirim data...", "biru");
+    
+    fetch("http://" + serverIP + ":" + SERVER_PORT + "/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(currentData)
+    })
+    .then(function(response) { return response.text(); })
+    .then(function(text) {
+        setStatus("Data BERHASIL dikirim! Editor di-reset.", "hijau");
+        currentData = null;
+        document.getElementById("daftar-halaman").innerHTML = "";
+    })
+    .catch(function(err) {
+        setStatus("GAGAL KIRIM: " + err.message, "merah");
+    });
+}
 
- }
+// ==================== TAMPILKAN DAFTAR ====================
+function tampilkanDaftar() {
+    if (!currentData) return;
+    
+    var container = document.getElementById("daftar-halaman");
+    container.innerHTML = "";
+    
+    currentData.pengumuman.forEach(function(page, index) {
+        var div = document.createElement("div");
+        div.className = "halaman-item";
+        div.onclick = function() { bukaForm(index); };
+        
+        var nomor = document.createElement("div");
+        nomor.className = "nomor";
+        nomor.textContent = "Halaman " + (index + 1);
+        
+        var judul = document.createElement("div");
+        judul.className = "judul";
+        judul.textContent = page.judul || "Tanpa Judul";
+        
+        var tipe = document.createElement("div");
+        tipe.className = "tipe";
+        tipe.textContent = page.type || "-";
+        
+        div.appendChild(nomor);
+        div.appendChild(judul);
+        div.appendChild(tipe);
+        container.appendChild(div);
+    });
+}
 
- data.pages.forEach((p,i)=>{
+// ==================== FORM EDIT ====================
+function bukaForm(index) {
+    if (!currentData || !currentData.pengumuman[index]) return;
+    
+    editIndex = index;
+    var page = currentData.pengumuman[index];
+    
+    document.getElementById("form-judul").textContent = "EDIT HALAMAN " + (index + 1);
+    
+    var isi = document.getElementById("form-isi");
+    isi.innerHTML = "";
+    
+    isi.appendChild(buatField("Judul", "text", "field-judul", page.judul || ""));
+    isi.appendChild(buatField("Durasi (detik)", "number", "field-durasi", page.durasi || 10));
+    
+    if (page.type === "text_pendek" || page.type === "text_panjang") {
+        isi.appendChild(buatTextarea("Isi", "field-isi", page.isi || ""));
+    }
+    
+    if (page.type === "tabel_pendek" || page.type === "tabel_panjang") {
+        isi.appendChild(buatTabelEditor(page));
+    }
+    
+    if (page.type === "tabel_keuangan") {
+        isi.appendChild(buatField("Saldo Awal (Rp)", "number", "field-saldo", page.saldo_awal || 0));
+        isi.appendChild(buatTabelEditor(page));
+    }
+    
+    var info = document.createElement("div");
+    info.className = "info-tipe";
+    info.textContent = "Tipe: " + page.type;
+    isi.appendChild(info);
+    
+    // Tombol urutan
+    var urutan = document.createElement("div");
+    urutan.className = "urutan-tombol";
+    
+    var btnNaik = document.createElement("button");
+    btnNaik.className = "btn btn-ambil";
+    btnNaik.textContent = "↑ NAIK";
+    btnNaik.onclick = function() { urutkan(index, -1); };
+    
+    var btnTurun = document.createElement("button");
+    btnTurun.className = "btn btn-ambil";
+    btnTurun.textContent = "↓ TURUN";
+    btnTurun.onclick = function() { urutkan(index, 1); };
+    
+    var btnHapus = document.createElement("button");
+    btnHapus.className = "btn btn-merah";
+    btnHapus.textContent = "✕ HAPUS";
+    btnHapus.onclick = function() { hapusHalaman(index); };
+    
+    urutan.appendChild(btnNaik);
+    urutan.appendChild(btnTurun);
+    urutan.appendChild(btnHapus);
+    isi.appendChild(urutan);
+    
+    document.getElementById("form-overlay").classList.add("aktif");
+}
 
-  if(!p || typeof p!=='object'){
+function buatField(label, tipe, id, nilai) {
+    var div = document.createElement("div");
+    div.className = "form-group";
+    
+    var lbl = document.createElement("label");
+    lbl.textContent = label;
+    lbl.setAttribute("for", id);
+    
+    var input = document.createElement("input");
+    input.type = tipe;
+    input.id = id;
+    input.value = nilai;
+    
+    div.appendChild(lbl);
+    div.appendChild(input);
+    return div;
+}
 
-   data.pages[i]={
-    type:'table',
-    judul:'Halaman '+(i+1),
-    durasi:10,
-    columns:[
-     'Kolom 1',
-     'Kolom 2',
-     'Kolom 3'
-    ],
-    rows:[
-     ['','','']
-    ]
-   };
+function buatTextarea(label, id, nilai) {
+    var div = document.createElement("div");
+    div.className = "form-group";
+    
+    var lbl = document.createElement("label");
+    lbl.textContent = label;
+    lbl.setAttribute("for", id);
+    
+    var ta = document.createElement("textarea");
+    ta.id = id;
+    ta.value = nilai;
+    
+    div.appendChild(lbl);
+    div.appendChild(ta);
+    return div;
+}
 
-   return;
+function buatTabelEditor(page) {
+    var div = document.createElement("div");
+    div.className = "tabel-editor";
+    
+    var lbl = document.createElement("label");
+    lbl.textContent = "Isi Tabel:";
+    lbl.style.display = "block";
+    lbl.style.fontSize = "20px";
+    lbl.style.fontWeight = "bold";
+    lbl.style.marginBottom = "8px";
+    div.appendChild(lbl);
+    
+    var table = document.createElement("table");
+    
+    var thead = document.createElement("thead");
+    var trHead = document.createElement("tr");
+    page.headers.forEach(function(h, i) {
+        var th = document.createElement("th");
+        var input = document.createElement("input");
+        input.type = "text";
+        input.value = h;
+        input.setAttribute("data-header", i);
+        th.appendChild(input);
+        trHead.appendChild(th);
+    });
+    thead.appendChild(trHead);
+    table.appendChild(thead);
+    
+    var tbody = document.createElement("tbody");
+    
+    page.rows.forEach(function(row, r) {
+        var tr = document.createElement("tr");
+        row.forEach(function(cell, c) {
+            var td = document.createElement("td");
+            var input = document.createElement("input");
+            input.type = "text";
+            input.value = cell;
+            input.setAttribute("data-baris", r);
+            input.setAttribute("data-kolom", c);
+            td.appendChild(input);
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    div.appendChild(table);
+    
+    var aksi = document.createElement("div");
+    aksi.className = "aksi-baris";
+    
+    var btnTambah = document.createElement("button");
+    btnTambah.className = "btn btn-kirim";
+    btnTambah.textContent = "+ TAMBAH BARIS";
+    btnTambah.onclick = function() {
+        simpanFormData();
+        var kolom = page.jumlah_kolom || page.headers.length;
+        var barisBaru = [];
+        for (var i = 0; i < kolom; i++) barisBaru.push("");
+        page.rows.push(barisBaru);
+        bukaForm(editIndex);
+    };
+    
+    var btnHapusBaris = document.createElement("button");
+    btnHapusBaris.className = "btn btn-merah";
+    btnHapusBaris.textContent = "− HAPUS BARIS";
+    btnHapusBaris.onclick = function() {
+        if (page.rows.length > 1) {
+            page.rows.pop();
+            bukaForm(editIndex);
+        }
+    };
+    
+    aksi.appendChild(btnTambah);
+    aksi.appendChild(btnHapusBaris);
+    div.appendChild(aksi);
+    
+    return div;
+}
 
-  }
+// ==================== SIMPAN FORM ====================
+function simpanFormData() {
+    if (!currentData || editIndex < 0) return;
+    
+    var page = currentData.pengumuman[editIndex];
+    
+    var judul = document.getElementById("field-judul");
+    if (judul) page.judul = judul.value;
+    
+    var durasi = document.getElementById("field-durasi");
+    if (durasi) page.durasi = parseInt(durasi.value) || 10;
+    
+    var isi = document.getElementById("field-isi");
+    if (isi) page.isi = isi.value;
+    
+    var saldo = document.getElementById("field-saldo");
+    if (saldo) page.saldo_awal = parseInt(saldo.value) || 0;
+    
+    var headerInputs = document.querySelectorAll("[data-header]");
+    headerInputs.forEach(function(input) {
+        var i = parseInt(input.getAttribute("data-header"));
+        if (page.headers) page.headers[i] = input.value;
+    });
+    
+    var cellInputs = document.querySelectorAll("[data-baris]");
+    cellInputs.forEach(function(input) {
+        var r = parseInt(input.getAttribute("data-baris"));
+        var c = parseInt(input.getAttribute("data-kolom"));
+        if (page.rows && page.rows[r]) page.rows[r][c] = input.value;
+    });
+}
 
-  p.judul=
-   p.judul ||
-   p.title ||
-   ('Halaman '+(i+1));
+function simpanForm() {
+    if (!currentData || editIndex < 0) return;
+    
+    simpanFormData();
+    
+    setStatus("Halaman " + (editIndex + 1) + " disimpan", "hijau");
+    tutupForm();
+    tampilkanDaftar();
+}
 
-  p.type=
-   p.type ||
-   'table';
+function tutupForm() {
+    document.getElementById("form-overlay").classList.remove("aktif");
+    editIndex = -1;
+}
 
-  p.durasi=
-   Math.max(
-    1,
-    Number(
-     p.durasi ??
-     p.duration
-    )||10
-   );
+// ==================== URUTKAN ====================
+function urutkan(index, arah) {
+    simpanFormData();
+    
+    var target = index + arah;
+    if (target < 0 || target >= currentData.pengumuman.length) return;
+    
+    var temp = currentData.pengumuman[index];
+    currentData.pengumuman[index] = currentData.pengumuman[target];
+    currentData.pengumuman[target] = temp;
+    
+    tutupForm();
+    tampilkanDaftar();
+    setStatus("Urutan diubah", "hijau");
+}
 
-  if(p.type==='finance'){
+// ==================== HAPUS ====================
+function hapusHalaman(index) {
+    if (!confirm("Hapus halaman " + (index + 1) + "?")) return;
+    
+    currentData.pengumuman.splice(index, 1);
+    tutupForm();
+    tampilkanDaftar();
+    setStatus("Halaman dihapus", "hijau");
+}
 
-   p.columns=[
-    ...(Array.isArray(p.columns)
-      ? p.columns
-      : [])
-   ].slice(0,FINANCE_COLUMNS);
-
-   while(
-    p.columns.length<FINANCE_COLUMNS
-   ){
-
-    p.columns.push(
-     'Kolom '+
-     (p.columns.length+1)
+// ==================== TAMBAH HALAMAN ====================
+function tampilkanTambah() {
+    if (!currentData) {
+        setStatus("Ambil data dulu", "merah");
+        return;
+    }
+    
+    var pilihan = prompt(
+        "Pilih tipe halaman:\n\n" +
+        "1 = Text Pendek\n" +
+        "2 = Text Panjang\n" +
+        "3 = Tabel Pendek\n" +
+        "4 = Tabel Panjang\n" +
+        "5 = Tabel Keuangan\n\n" +
+        "Ketik angka (1-5):"
     );
-
-   }
-
-  }else{
-
-   if(!Array.isArray(p.columns)){
-
-    if(Array.isArray(p.headers)){
-
-     p.columns=
-      p.headers.slice();
-
-    }else{
-
-     p.columns=[
-      'Kolom 1',
-      'Kolom 2',
-      'Kolom 3'
-     ];
-
+    
+    if (!pilihan) return;
+    
+    var tipe = "";
+    if (pilihan === "1") tipe = "text_pendek";
+    else if (pilihan === "2") tipe = "text_panjang";
+    else if (pilihan === "3") tipe = "tabel_pendek";
+    else if (pilihan === "4") tipe = "tabel_panjang";
+    else if (pilihan === "5") tipe = "tabel_keuangan";
+    else {
+        setStatus("Pilihan tidak valid", "merah");
+        return;
     }
-
-   }
-
-   if(!p.columns.length){
-
-    p.columns=[
-     'Kolom 1'
-    ];
-
-   }
-
-   if(p.columns.length>MAX_NORMAL_TABLE_COLUMNS){
-
-    p.columns=
-     p.columns.slice(
-      0,
-      MAX_NORMAL_TABLE_COLUMNS
-     );
-
-   }
-
-  }
-
-  if(!Array.isArray(p.rows)){
-
-   p.rows=[];
-
-  }
-
-  p.rows=p.rows.map(row=>{
-
-   if(!Array.isArray(row)){
-
-    row=[];
-
-   }
-
-   while(
-    row.length<
-    p.columns.length
-   ){
-
-    row.push('');
-
-   }
-
-   return row.slice(
-    0,
-    p.columns.length
-   );
-
-  });
-
-  if(p.type==='text'){
-
-   p.isi=
-    p.isi ||
-    '';
-
-  }
-
- });
-
-}
-
-function tableHasContent(pi){
-
- const p=
-  data.pages[pi];
-
- if(!p || p.type==='text'){
-  return false;
- }
-
- for(const h of p.columns){
-
-  if(
-   String(h??'').trim()!==''
-  ){
-
-   if(
-    !/^Kolom \d+$/.test(
-     String(h).trim()
-    )
-   ){
-
-    return true;
-
-   }
-
-  }
-
- }
-
- for(const row of p.rows){
-
-  for(const value of row){
-
-   if(
-    String(value??'').trim()!==''
-   ){
-
-    return true;
-
-   }
-
-  }
-
- }
-
- return false;
-
-}
-
-function updateTableSizing(pi){
-
- const table=
-  document.querySelector(
-   `table[data-page="${pi}"]`
-  );
-
- if(!table){
-  return;
- }
-
- if(tableHasContent(pi)){
-
-  table.classList.add(
-   'has-content'
-  );
-
- }else{
-
-  table.classList.remove(
-   'has-content'
-  );
-
- }
-
-}
-
-function movePageUp(i){
-
- if(i<=0){
-  return;
- }
-
- const temp=
-  data.pages[i-1];
-
- data.pages[i-1]=
-  data.pages[i];
-
- data.pages[i]=
-  temp;
-
- render();
-
-}
-
-function movePageDown(i){
-
- if(i>=data.pages.length-1){
-  return;
- }
-
- const temp=
-  data.pages[i+1];
-
- data.pages[i+1]=
-  data.pages[i];
-
- data.pages[i]=
-  temp;
-
- render();
-
-}
-
-function render(){
-
- normalize();
-
- const root=
-  document.getElementById('pages');
-
- if(!data.pages.length){
-
-  root.innerHTML=
-   '<div class="empty">'+
-   'Belum ada halaman. Tekan Tambah Halaman.'+
-   '</div>';
-
-  return;
-
- }
-
- root.innerHTML=
-  data.pages.map((p,pi)=>{
-
-  if(p.type==='text'){
-
-   return `
-
-   <section class="page">
-
-    <div class="pagehead">
-
-     <strong>
-      Halaman ${pi+1}
-     </strong>
-
-     <div class="pageActions">
-
-      <button
-       class="moveUp"
-       onclick="movePageUp(${pi})"
-       ${pi===0?'disabled':''}>
-       ↑ Naik
-      </button>
-
-      <button
-       class="moveDown"
-       onclick="movePageDown(${pi})"
-       ${pi===data.pages.length-1?'disabled':''}>
-       ↓ Turun
-      </button>
-
-      <button
-       class="deletePage"
-       onclick="deletePage(${pi})">
-       Hapus Halaman
-      </button>
-
-     </div>
-
-    </div>
-
-    <div class="field">
-
-     <label>Judul</label>
-
-     <input
-      value="${esc(p.judul)}"
-      oninput="
-       data.pages[${pi}].judul=this.value
-      ">
-
-    </div>
-
-    <div class="field">
-
-     <label>Isi Pengumuman</label>
-
-     <textarea
-      oninput="
-       data.pages[${pi}].isi=this.value
-      ">${esc(p.isi)}</textarea>
-
-```
-</div>
-
-<div class="field">
-
- <label>Durasi (detik)</label>
-
- <input
-  type="number"
-  min="1"
-  value="${p.durasi}"
-  oninput="
-   data.pages[${pi}].durasi=
-   Math.max(
-    1,
-    Number(this.value)||1
-   )
-  ">
-
-</div>
-```
-
-   </section>
-
-`;
-
-}
-
-const isFinance=
-p.type==='finance';
-
-const tableClass=
-isFinance
-? 'finance-table'
-: (
-tableHasContent(pi)
-? 'has-content'
-: ''
-);
-
-const maxCols=
-isFinance
-? FINANCE_COLUMNS
-: MAX_NORMAL_TABLE_COLUMNS;
-
-return `
-
-  <section class="page">
-
-   <div class="pagehead">
-
-```
-<strong>
- Halaman ${pi+1}
-</strong>
-
-<div class="pageActions">
-
- <button
-  class="moveUp"
-  onclick="movePageUp(${pi})"
-  ${pi===0?'disabled':''}>
-  ↑ Naik
- </button>
-
- <button
-  class="moveDown"
-  onclick="movePageDown(${pi})"
-  ${pi===data.pages.length-1?'disabled':''}>
-  ↓ Turun
- </button>
-
- <button
-  class="deletePage"
-  onclick="deletePage(${pi})">
-  Hapus Halaman
- </button>
-
-</div>
-```
-
-   </div>
-
-   <div class="field">
-
-```
-<label>
- ${isFinance?'Judul Tabel Keuangan':'Judul Tabel'}
-</label>
-
-<input
- value="${esc(p.judul)}"
- oninput="
-  data.pages[${pi}].judul=this.value
- ">
-```
-
-   </div>
-
-   <div class="grid">
-
-```
-<div class="field">
-
- <label>Jumlah Kolom</label>
-
- <input
-  type="number"
-  min="${isFinance?FINANCE_COLUMNS:1}"
-  max="${maxCols}"
-  value="${p.columns.length}"
-  ${isFinance?'readonly':''}
-  onchange="
-   setCols(${pi},this.value)
-  ">
-
-</div>
-
-<div class="field">
-
- <label>Durasi (detik)</label>
-
- <input
-  type="number"
-  min="1"
-  value="${p.durasi}"
-  oninput="
-   data.pages[${pi}].durasi=
-   Math.max(
-    1,
-    Number(this.value)||1
-   )
-  ">
-
-</div>
-```
-
-   </div>
-
-   <div class="tablewrap">
-
-```
-<table
- data-page="${pi}"
- class="${tableClass}">
-
- <thead>
-
-  <tr>
-
-   ${
-    p.columns.map((h,ci)=>`
-
-    <th>
-
-     <input
-      value="${esc(h)}"
-      oninput="
-       data.pages[${pi}].columns[${ci}]=this.value;
-       updateTableSizing(${pi})
-      ">
-
-    </th>
-
-    `).join('')
-   }
-
-   <th class="action">
-    X
-   </th>
-
-  </tr>
-
- </thead>
-
- <tbody>
-
-  ${
-   p.rows.map((r,ri)=>`
-
-   <tr>
-
-    ${
-     r.map((v,ci)=>`
-
-     <td>
-
-      <input
-       value="${esc(v)}"
-       oninput="
-        data.pages[${pi}].rows[${ri}][${ci}]=this.value;
-        updateTableSizing(${pi})
-       ">
-
-     </td>
-
-     `).join('')
+    
+    var newPage = {
+        id: Date.now(),
+        type: tipe,
+        judul: "Judul Baru",
+        durasi: 10
+    };
+    
+    if (tipe === "text_pendek" || tipe === "text_panjang") {
+        newPage.isi = "Tulis isi di sini";
+    } else if (tipe === "tabel_pendek" || tipe === "tabel_panjang") {
+        newPage.jumlah_kolom = 3;
+        newPage.headers = ["Kolom 1", "Kolom 2", "Kolom 3"];
+        newPage.rows = [["", "", ""]];
+    } else if (tipe === "tabel_keuangan") {
+        newPage.saldo_awal = 0;
+        newPage.jumlah_kolom = 4;
+        newPage.headers = ["Tanggal", "Uraian", "Pemasukan", "Pengeluaran"];
+        newPage.rows = [["", "", "0", "0"]];
     }
-
-    <td class="action">
-
-     <button
-      class="deleteRow"
-      title="Hapus baris"
-      onclick="
-       deleteRow(${pi},${ri})
-      ">
-      X
-     </button>
-
-    </td>
-
-   </tr>
-
-   `).join('')
-  }
-
- </tbody>
-
-</table>
-```
-
-   </div>
-
-   <div class="controls">
-
-```
-<button
- class="addrow"
- onclick="addRow(${pi})">
- ＋ Tambah Baris
-</button>
-```
-
-   </div>
-
-  </section>
-
-`;
-
-}).join('');
-
+    
+    currentData.pengumuman.push(newPage);
+    tampilkanDaftar();
+    setStatus("Halaman ditambahkan", "hijau");
 }
 
-function addPage(){
-
-const root=
-document.getElementById('pages');
-
-root.innerHTML=`
-
-  <div class="chooser">
-
-   <div class="chooserTitle">
-    Pilih Jenis Halaman
-   </div>
-
-<button
- class="btnText"
- onclick="buatHalamanText()">
-HALAMAN TEXT </button>
-
-<button
- class="btnTable"
- onclick="buatHalamanTabel()">
-TABEL </button>
-
-<button
- class="btnFinance"
- onclick="buatHalamanFinance()">
-FINANCE </button>
-
-<button
- class="btnCancel"
- onclick="render()">
-BATAL </button>
-
-  </div>
-
-`;
-
-}
-
-function buatHalamanText(){
-
-const number=
-data.pages.length+1;
-
-data.pages.push({
-
-type:'text',
-
-judul:
-'Halaman '+number,
-
-isi:'',
-
-durasi:10
-
+// ==================== INIT ====================
+window.addEventListener("load", function() {
+    deteksiIP();
 });
-
-render();
-
-}
-
-function buatHalamanTabel(){
-
-const number=
-data.pages.length+1;
-
-data.pages.push({
-
-type:'table',
-
-judul:
-'Halaman '+number,
-
-durasi:10,
-
-columns:[
-'Kolom 1',
-'Kolom 2',
-'Kolom 3'
-],
-
-rows:[
-['','','']
-]
-
-});
-
-render();
-
-}
-
-function buatHalamanFinance(){
-
-const number=
-data.pages.length+1;
-
-data.pages.push({
-
-type:'finance',
-
-judul:
-'Keuangan',
-
-durasi:10,
-
-columns:[
-'No',
-'Keterangan',
-'Pemasukan',
-'Pengeluaran'
-],
-
-rows:[
-['','','','']
-]
-
-});
-
-render();
-
-}
-
-function deletePage(i){
-
-if(
-confirm('Hapus halaman ini?')
-){
-
-data.pages.splice(i,1);
-
-render();
-
-}
-
-}
-
-function addRow(pi){
-
-const p=
-data.pages[pi];
-
-p.rows.push(
-new Array(
-p.columns.length
-).fill('')
-);
-
-render();
-
-}
-
-function deleteRow(pi,ri){
-
-data.pages[pi].rows.splice(
-ri,
-1
-);
-
-render();
-
-}
-
-function setCols(pi,val){
-
-const p=
-data.pages[pi];
-
-if(p.type==='finance'){
-
-p.columns=[
-'No',
-'Keterangan',
-'Pemasukan',
-'Pengeluaran'
-];
-
-p.rows.forEach(row=>{
-
-row.length=FINANCE_COLUMNS;
-
-while(
-row.length<FINANCE_COLUMNS
-){
-
-```
-row.push('');
-```
-
-}
-
-});
-
-render();
-
-return;
-
-}
-
-let n=
-Math.max(
-1,
-Math.min(
-MAX_NORMAL_TABLE_COLUMNS,
-parseInt(val)||1
-)
-);
-
-p.columns=
-p.columns.slice(0,n);
-
-while(
-p.columns.length<n
-){
-
-p.columns.push(
-'Kolom '+
-(p.columns.length+1)
-);
-
-}
-
-p.rows.forEach(row=>{
-
-row.length=n;
-
-while(
-row.length<n
-){
-
-row.push('');
-
-}
-
-});
-
-render();
-
-}
-
-/* =====================================================
-PENCARIAN OTOMATIS TAMPILATOR
-===================================================== */
-
-let tvBoxUrl='';
-
-function url(){
-return tvBoxUrl;
-}
-
-async function probe(host){
-
-try{
-
-const r=
-await fetch(
-'http://'+host+':8080/Get_Data?t='+Date.now(),
-{
-method:'GET',
-cache:'no-store'
-}
-);
-
-if(!r.ok)return false;
-
-const x=
-await r.json();
-
-return !!(
-x &&
-x.data &&
-Array.isArray(x.data.pages)
-);
-
-}catch(e){
-
-return false;
-
-}
-
-}
-
-async function findTVBox(){
-
-setStatus(
-'Mencari Tampilator...',
-true
-);
-
-tvBoxUrl='';
-
-const hosts=[];
-
-for(
-let i=1;
-i<=254;
-i++
-){
-
-hosts.push(
-'192.168.43.'+i
-);
-
-}
-
-let found=false;
-
-const batch=20;
-
-for(
-let i=0;
-i<hosts.length&&!found;
-i+=batch
-){
-
-const group=
-hosts.slice(
-i,
-i+batch
-);
-
-const results=
-await Promise.all(
-group.map(
-async h=>({
-h,
-ok:await probe(h)
-})
-)
-);
-
-const hit=
-results.find(
-x=>x.ok
-);
-
-if(hit){
-
-tvBoxUrl=
-'http://'+
-hit.h+
-':8080';
-
-found=true;
-
-}
-
-}
-
-if(found){
-
-setStatus(
-'Tampilator ditemukan: '+
-tvBoxUrl,
-true
-);
-
-return true;
-
-}
-
-setStatus(
-'Tampilator tidak ditemukan. Pastikan HP terhubung ke hotspot TV Box.',
-false
-);
-
-return false;
-
-}
-
-/* =====================================================
-AMBIL DATA
-===================================================== */
-
-async function getData(){
-
-if(!url()){
-
-const found=
-await findTVBox();
-
-if(!found)return;
-
-}
-
-setStatus(
-'Mengambil data dari TV Box...',
-true
-);
-
-try{
-
-const r=
-await fetch(
-url()+
-'/Get_Data?t='+
-Date.now(),
-{
-method:'GET',
-cache:'no-store'
-}
-);
-
-if(!r.ok){
-
-throw Error(
-'HTTP '+r.status
-);
-
-}
-
-const x=
-await r.json();
-
-if(
-!x ||
-!x.data ||
-!Array.isArray(
-x.data.pages
-)
-){
-
-throw Error(
-'Format data dari server tidak sesuai.'
-);
-
-}
-
-data=
-x.data;
-
-normalize();
-
-render();
-
-setStatus(
-'Data berhasil diambil dari TV Box.',
-true
-);
-
-}catch(e){
-
-console.error(e);
-
-setStatus(
-'Ambil Data gagal: '+
-e.message,
-false
-);
-
-}
-
-}
-
-/* =====================================================
-SIMPAN DATA
-===================================================== */
-
-async function saveData(){
-
-if(!url()){
-
-const found=
-await findTVBox();
-
-if(!found)return;
-
-}
-
-normalize();
-
-setStatus(
-'Menyimpan data ke TV Box...',
-true
-);
-
-try{
-
-const r=
-await fetch(
-url()+'/Set_Data',
-{
-method:'POST',
-
-```
- headers:{
-  'Content-Type':
-   'application/json'
- },
-
- body:
-  JSON.stringify(data)
-}
-```
-
-);
-
-if(!r.ok){
-
-throw Error(
-'HTTP '+r.status
-);
-
-}
-
-const x=
-await r.json();
-
-if(
-x &&
-x.status &&
-x.status!=='OK'
-){
-
-throw Error(
-x.message||
-'Server menolak data.'
-);
-
-}
-
-setStatus(
-'Data berhasil disimpan ke TV Box.',
-true
-);
-
-}catch(e){
-
-console.error(e);
-
-setStatus(
-'Simpan Data gagal: '+
-e.message,
-false
-);
-
-}
-
-}
-
-/* =====================================================
-MULAI
-===================================================== */
-
-render();
-
-findTVBox();
-
 </script>
 
 </body>
