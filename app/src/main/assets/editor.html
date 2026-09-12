@@ -5,421 +5,69 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tampilator Editor</title>
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
-    background: #d9dde3;
-    color: #000;
-    padding: 15px;
-    padding-bottom: 100px;
-    font-size: 18px;
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.header h1 {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.header .ip-info {
-    font-size: 14px;
-    color: #555;
-}
-
-.tombol-utama {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.btn {
-    flex: 1;
-    padding: 22px 15px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-}
-
-.btn:active {
-    transform: scale(0.97);
-}
-
-.btn:disabled {
-    background: #999 !important;
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+body { background: #d9dde3; color: #000; padding: 15px; padding-bottom: 100px; font-size: 18px; }
+.header { text-align: center; margin-bottom: 15px; }
+.header h1 { font-size: 28px; font-weight: bold; margin-bottom: 5px; }
+.header .ip-info { font-size: 14px; color: #555; }
+.tab-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+.tab-bar button { flex: 1; padding: 15px; font-size: 18px; font-weight: bold; border: 2px solid #1a5c99; background: #fff; color: #1a5c99; border-radius: 10px; cursor: pointer; }
+.tab-bar button.aktif { background: #1a5c99; color: #fff; }
+.tombol-utama { display: flex; gap: 12px; margin-bottom: 20px; }
+.btn { flex: 1; padding: 22px 15px; font-size: 20px; font-weight: bold; color: #fff; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+.btn:active { transform: scale(0.97); }
+.btn:disabled { background: #999 !important; cursor: not-allowed; opacity: 0.5; }
 .btn-ambil { background: #1a5c99; }
 .btn-kirim { background: #0d8033; }
 .btn-merah { background: #cc3333; }
-
-.status {
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    font-size: 16px;
-    font-weight: bold;
-    min-height: 30px;
-    text-align: center;
-    border: 1px solid #aaa;
-}
-
+.status { background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 15px; font-size: 16px; font-weight: bold; min-height: 30px; text-align: center; border: 1px solid #aaa; }
 .status.hijau { color: #0d8033; }
 .status.merah { color: #cc3333; }
 .status.biru { color: #1a5c99; }
-
-.label {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 20px 0 10px 0;
-}
-
-.daftar-halaman {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.halaman-item {
-    background: #fff;
-    border: 1px solid #aaa;
-    border-radius: 10px;
-    padding: 15px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.halaman-item:active {
-    background: #eee;
-}
-
-.halaman-item .nomor {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 5px;
-}
-
-.halaman-item .judul {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    word-wrap: break-word;
-}
-
-.halaman-item .tipe {
-    font-size: 13px;
-    color: #888;
-    font-style: italic;
-}
-
-.btn-tambah {
-    background: #0d8033;
-    color: #fff;
-    border: none;
-    padding: 25px;
-    font-size: 20px;
-    font-weight: bold;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-top: 15px;
-    width: 100%;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    display: none;
-}
-
-.form-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 100;
-    overflow-y: auto;
-    padding: 15px;
-}
-
-.form-overlay.aktif {
-    display: block;
-}
-
-.form-kotak {
-    background: #fff;
-    border-radius: 15px;
-    padding: 20px;
-    max-width: 600px;
-    margin: 10px auto;
-}
-
-.form-kotak h2 {
-    font-size: 22px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.form-group {
-    margin-bottom: 18px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 14px;
-    font-size: 18px;
-    border: 2px solid #aaa;
-    border-radius: 8px;
-    font-family: inherit;
-}
-
-.form-group textarea {
-    min-height: 150px;
-    resize: vertical;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #1a5c99;
-}
-
-.info-tipe {
-    text-align: center;
-    font-size: 15px;
-    color: #777;
-    margin: 15px 0;
-    font-style: italic;
-}
-
-.form-tombol {
-    display: flex;
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.form-tombol .btn {
-    flex: 1;
-    padding: 18px 10px;
-    font-size: 18px;
-}
-
-/* ==================== CARD LAYOUT TABEL ==================== */
-.card-list {
-    margin-top: 15px;
-}
-
-.card-header-label {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #1a5c99;
-}
-
-.card-item {
-    background: #f5f5f5;
-    border: 2px solid #1a5c99;
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 12px;
-    position: relative;
-}
-
-.card-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #ccc;
-}
-
-.card-nomor {
-    font-size: 16px;
-    font-weight: bold;
-    color: #1a5c99;
-}
-
-.btn-x-card {
-    background: #cc3333;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.btn-x-card:active {
-    background: #aa2222;
-}
-
-.card-field {
-    margin-bottom: 10px;
-}
-
-.card-field:last-child {
-    margin-bottom: 0;
-}
-
-.card-field label {
-    display: block;
-    font-size: 14px;
-    font-weight: bold;
-    color: #555;
-    margin-bottom: 4px;
-}
-
-.card-field input {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    font-family: inherit;
-    background: #fff;
-}
-
-.card-field input:focus {
-    outline: none;
-    border-color: #1a5c99;
-}
-
-.header-edit-section {
-    background: #eef4fa;
-    border-radius: 10px;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #1a5c99;
-}
-
-.header-edit-section label {
-    display: block;
-    font-size: 16px;
-    font-weight: bold;
-    color: #1a5c99;
-    margin-bottom: 8px;
-}
-
-.header-edit-section .card-field {
-    margin-bottom: 8px;
-}
-
-.header-edit-section .card-field:last-child {
-    margin-bottom: 0;
-}
-
-.aksi-baris {
-    display: flex;
-    gap: 8px;
-    margin-top: 15px;
-}
-
-.aksi-baris .btn {
-    flex: 1;
-    padding: 15px;
-    font-size: 16px;
-}
-
-.urutan-tombol {
-    display: flex;
-    gap: 8px;
-    margin-top: 15px;
-}
-
-.urutan-tombol .btn {
-    flex: 1;
-    padding: 15px;
-    font-size: 16px;
-}
-
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 200;
-    padding: 20px;
-}
-
-.modal-overlay.aktif {
-    display: block;
-}
-
-.modal-kotak {
-    background: #fff;
-    border-radius: 15px;
-    padding: 25px;
-    max-width: 500px;
-    margin: 100px auto;
-}
-
-.modal-kotak h2 {
-    font-size: 22px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.modal-pilihan {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.modal-pilihan button {
-    padding: 22px;
-    font-size: 18px;
-    font-weight: bold;
-    border: 2px solid #1a5c99;
-    background: #fff;
-    color: #1a5c99;
-    border-radius: 10px;
-    cursor: pointer;
-    text-align: left;
-}
-
-.modal-pilihan button:active {
-    background: #1a5c99;
-    color: #fff;
-}
-
-.modal-pilihan button .keterangan {
-    display: block;
-    font-size: 13px;
-    font-weight: normal;
-    color: #666;
-    margin-top: 5px;
-}
-
-.modal-pilihan button:active .keterangan {
-    color: #ddd;
-}
+.label { font-size: 20px; font-weight: bold; margin: 20px 0 10px 0; }
+.daftar-item { display: flex; flex-direction: column; gap: 12px; }
+.item-card { background: #fff; border: 1px solid #aaa; border-radius: 10px; padding: 15px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.item-card:active { background: #eee; }
+.item-card .nomor { font-size: 14px; color: #666; margin-bottom: 5px; }
+.item-card .judul { font-size: 20px; font-weight: bold; margin-bottom: 5px; word-wrap: break-word; }
+.item-card .subjudul { font-size: 14px; color: #888; font-style: italic; }
+.btn-tambah { background: #0d8033; color: #fff; border: none; padding: 25px; font-size: 20px; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 15px; width: 100%; box-shadow: 0 3px 6px rgba(0,0,0,0.2); display: none; }
+.form-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 100; overflow-y: auto; padding: 15px; }
+.form-overlay.aktif { display: block; }
+.form-kotak { background: #fff; border-radius: 15px; padding: 20px; max-width: 600px; margin: 10px auto; }
+.form-kotak h2 { font-size: 22px; margin-bottom: 20px; text-align: center; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+.form-group input, .form-group textarea { width: 100%; padding: 14px; font-size: 18px; border: 2px solid #aaa; border-radius: 8px; font-family: inherit; }
+.form-group textarea { min-height: 150px; resize: vertical; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: #1a5c99; }
+.form-tombol { display: flex; gap: 12px; margin-top: 20px; }
+.form-tombol .btn { flex: 1; padding: 18px 10px; font-size: 18px; }
+.card-list { margin-top: 15px; }
+.card-header-label { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a5c99; }
+.card-item { background: #f5f5f5; border: 2px solid #1a5c99; border-radius: 12px; padding: 12px; margin-bottom: 12px; }
+.card-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #ccc; }
+.card-nomor { font-size: 16px; font-weight: bold; color: #1a5c99; }
+.btn-x-card { background: #cc3333; color: #fff; border: none; border-radius: 6px; padding: 8px 14px; font-size: 16px; font-weight: bold; cursor: pointer; }
+.card-field { margin-bottom: 10px; }
+.card-field:last-child { margin-bottom: 0; }
+.card-field label { display: block; font-size: 14px; font-weight: bold; color: #555; margin-bottom: 4px; }
+.card-field input { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ccc; border-radius: 8px; font-family: inherit; background: #fff; }
+.header-edit-section { background: #eef4fa; border-radius: 10px; padding: 12px; margin-bottom: 15px; border: 1px solid #1a5c99; }
+.header-edit-section label { display: block; font-size: 16px; font-weight: bold; color: #1a5c99; margin-bottom: 8px; }
+.aksi-baris { display: flex; gap: 8px; margin-top: 15px; }
+.aksi-baris .btn { flex: 1; padding: 15px; font-size: 16px; }
+.urutan-tombol { display: flex; gap: 8px; margin-top: 15px; }
+.urutan-tombol .btn { flex: 1; padding: 15px; font-size: 16px; }
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 200; padding: 20px; }
+.modal-overlay.aktif { display: block; }
+.modal-kotak { background: #fff; border-radius: 15px; padding: 25px; max-width: 500px; margin: 100px auto; }
+.modal-kotak h2 { font-size: 22px; margin-bottom: 20px; text-align: center; }
+.modal-pilihan { display: flex; flex-direction: column; gap: 12px; }
+.modal-pilihan button { padding: 22px; font-size: 18px; font-weight: bold; border: 2px solid #1a5c99; background: #fff; color: #1a5c99; border-radius: 10px; cursor: pointer; text-align: left; }
+.modal-pilihan button:active { background: #1a5c99; color: #fff; }
+.modal-pilihan button .keterangan { display: block; font-size: 13px; font-weight: normal; color: #666; margin-top: 5px; }
+.hidden { display: none !important; }
 </style>
 </head>
 <body>
@@ -429,21 +77,33 @@ body {
     <div class="ip-info" id="info-ip">Mendeteksi IP...</div>
 </div>
 
+<div class="tab-bar">
+    <button id="tab-text" class="aktif" onclick="pilihTab('text')">TEXT (Kanan)</button>
+    <button id="tab-card" onclick="pilihTab('card')">CARD (Kiri)</button>
+</div>
+
 <div class="tombol-utama">
-    <button class="btn btn-ambil" id="btn-ambil" onclick="ambilData()">AMBIL DATA</button>
+    <button class="btn btn-ambil" onclick="ambilData()">AMBIL DATA</button>
     <button class="btn btn-kirim" id="btn-kirim" onclick="kirimData()" disabled>KIRIM DATA</button>
 </div>
 
 <div class="status" id="status">Tekan AMBIL DATA untuk mulai</div>
 
-<div class="label">DAFTAR HALAMAN</div>
-<div class="daftar-halaman" id="daftar-halaman"></div>
+<div id="area-text">
+    <div class="label">DAFTAR TEXT</div>
+    <div class="daftar-item" id="daftar-text"></div>
+    <button class="btn-tambah" id="btn-tambah-text" onclick="tambahText()">+ TAMBAH TEXT</button>
+</div>
 
-<button class="btn-tambah" id="btn-tambah" onclick="tampilkanTambah()">+ TAMBAH HALAMAN</button>
+<div id="area-card" class="hidden">
+    <div class="label">DAFTAR CARD</div>
+    <div class="daftar-item" id="daftar-card"></div>
+    <button class="btn-tambah" id="btn-tambah-card" onclick="tambahCard()">+ TAMBAH CARD</button>
+</div>
 
 <div class="form-overlay" id="form-overlay">
     <div class="form-kotak">
-        <h2 id="form-judul">EDIT HALAMAN</h2>
+        <h2 id="form-judul">EDIT</h2>
         <div id="form-isi"></div>
         <div class="form-tombol">
             <button class="btn btn-kirim" onclick="simpanForm()">SIMPAN</button>
@@ -452,35 +112,14 @@ body {
     </div>
 </div>
 
-<div class="modal-overlay" id="modal-tambah">
-    <div class="modal-kotak">
-        <h2>Pilih Jenis Halaman</h2>
-        <div class="modal-pilihan">
-            <button onclick="pilihTipe('pengumuman')">
-                📝 Pengumuman Biasa
-                <span class="keterangan">Untuk pengumuman, jadwal, aturan masjid, dll.</span>
-            </button>
-            <button onclick="pilihTipe('tabel')">
-                📊 Tabel Data
-                <span class="keterangan">Untuk daftar nama, peserta qurban, donatur, dll.</span>
-            </button>
-            <button onclick="pilihTipe('keuangan')">
-                💰 Laporan Keuangan
-                <span class="keterangan">Untuk laporan pemasukan dan pengeluaran.</span>
-            </button>
-            <button onclick="tutupModalTambah()" style="border-color: #cc3333; color: #cc3333;">
-                ✕ Batal
-            </button>
-        </div>
-    </div>
-</div>
-
 <script>
 var SERVER_PORT = 8080;
 var serverIP = "192.168.43.1";
-var ipTerdeteksi = false;
-var currentData = null;
+var dataText = null;
+var dataCard = null;
+var tabAktif = "text";
 var editIndex = -1;
+var editTipe = "";
 
 function getGatewayIP() {
     try {
@@ -488,19 +127,15 @@ function getGatewayIP() {
             var ip = window.AndroidBridge.getTvBoxIp();
             if (ip && ip.length > 0) return ip;
         }
-    } catch (e) {
-        console.log("AndroidBridge error: " + e.message);
-    }
+    } catch (e) {}
     return null;
 }
 
 function deteksiIP() {
     var gateway = getGatewayIP();
     var el = document.getElementById("info-ip");
-    
     if (gateway) {
         serverIP = gateway;
-        ipTerdeteksi = true;
         el.textContent = "Tersambung ke TV Box: " + serverIP + ":" + SERVER_PORT;
         el.style.color = "#0d8033";
         el.style.fontWeight = "bold";
@@ -516,166 +151,94 @@ function setStatus(pesan, warna) {
     el.className = "status " + (warna || "");
 }
 
+function pilihTab(tab) {
+    tabAktif = tab;
+    document.getElementById("tab-text").className = (tab === "text") ? "aktif" : "";
+    document.getElementById("tab-card").className = (tab === "card") ? "aktif" : "";
+    document.getElementById("area-text").className = (tab === "text") ? "" : "hidden";
+    document.getElementById("area-card").className = (tab === "card") ? "" : "hidden";
+}
+
 function ambilData() {
     setStatus("Mengambil data...", "biru");
+    var selesai = 0;
     
-    fetch("http://" + serverIP + ":" + SERVER_PORT + "/data")
-        .then(function(response) { return response.text(); })
-        .then(function(text) {
+    fetch("http://" + serverIP + ":" + SERVER_PORT + "/text")
+        .then(function(r) { return r.text(); })
+        .then(function(t) {
             try {
-                var data = JSON.parse(text);
-                if (data && data.pengumuman) {
-                    currentData = data;
-                    setStatus("Data diambil: " + data.pengumuman.length + " halaman", "hijau");
-                    tampilkanDaftar();
-                    document.getElementById("btn-kirim").disabled = false;
-                    document.getElementById("btn-tambah").style.display = "block";
-                } else {
-                    setStatus("Data tidak valid", "merah");
-                }
-            } catch (e) {
-                setStatus("Error: " + e.message, "merah");
-            }
+                var d = JSON.parse(t);
+                if (d && d.text) dataText = d;
+            } catch(e) {}
+            selesai++;
+            if (selesai === 2) selesaiAmbil();
         })
-        .catch(function(err) {
-            setStatus("GAGAL KONEKSI: pastikan HP terhubung ke WiFi TV Box", "merah");
-        });
+        .catch(function() { selesai++; if (selesai === 2) selesaiAmbil(); });
+    
+    fetch("http://" + serverIP + ":" + SERVER_PORT + "/card")
+        .then(function(r) { return r.text(); })
+        .then(function(t) {
+            try {
+                var d = JSON.parse(t);
+                if (d && d.card) dataCard = d;
+            } catch(e) {}
+            selesai++;
+            if (selesai === 2) selesaiAmbil();
+        })
+        .catch(function() { selesai++; if (selesai === 2) selesaiAmbil(); });
 }
 
-function kirimData() {
-    if (!currentData || !currentData.pengumuman) {
-        setStatus("Belum ada data", "merah");
+function selesaiAmbil() {
+    if (!dataText || !dataCard) {
+        setStatus("Gagal ambil data", "merah");
         return;
     }
-    
-    setStatus("Mengirim data...", "biru");
-    
-    fetch("http://" + serverIP + ":" + SERVER_PORT + "/data", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(currentData)
-    })
-    .then(function(response) { return response.text(); })
-    .then(function(text) {
-        setStatus("Data BERHASIL dikirim! Editor di-reset.", "hijau");
-        currentData = null;
-        document.getElementById("daftar-halaman").innerHTML = "";
-        document.getElementById("btn-kirim").disabled = true;
-        document.getElementById("btn-tambah").style.display = "none";
-    })
-    .catch(function(err) {
-        setStatus("GAGAL KIRIM: " + err.message, "merah");
-    });
+    setStatus("Data diambil: " + dataText.text.length + " text, " + dataCard.card.length + " card", "hijau");
+    tampilkanDaftarText();
+    tampilkanDaftarCard();
+    document.getElementById("btn-kirim").disabled = false;
+    document.getElementById("btn-tambah-text").style.display = "block";
+    document.getElementById("btn-tambah-card").style.display = "block";
 }
 
-function tampilkanDaftar() {
-    if (!currentData) return;
-    
-    var container = document.getElementById("daftar-halaman");
-    container.innerHTML = "";
-    
-    currentData.pengumuman.forEach(function(page, index) {
+function tampilkanDaftarText() {
+    if (!dataText) return;
+    var c = document.getElementById("daftar-text");
+    c.innerHTML = "";
+    dataText.text.forEach(function(item, i) {
         var div = document.createElement("div");
-        div.className = "halaman-item";
-        div.onclick = function() { bukaForm(index); };
-        
-        var nomor = document.createElement("div");
-        nomor.className = "nomor";
-        nomor.textContent = "Halaman " + (index + 1);
-        
-        var judul = document.createElement("div");
-        judul.className = "judul";
-        judul.textContent = page.judul || "Tanpa Judul";
-        
-        var tipe = document.createElement("div");
-        tipe.className = "tipe";
-        tipe.textContent = namaTipe(page.type);
-        
-        div.appendChild(nomor);
-        div.appendChild(judul);
-        div.appendChild(tipe);
-        container.appendChild(div);
+        div.className = "item-card";
+        div.onclick = function() { bukaFormText(i); };
+        div.innerHTML = '<div class="nomor">Text ' + (i+1) + '</div>' +
+                        '<div class="judul">' + (item.judul || "-") + '</div>' +
+                        '<div class="subjudul">Durasi: ' + (item.durasi || 10) + ' detik</div>';
+        c.appendChild(div);
     });
 }
 
-function namaTipe(tipe) {
-    if (tipe === "text_pendek" || tipe === "text_panjang") return "Pengumuman";
-    if (tipe === "tabel_pendek" || tipe === "tabel_panjang") return "Tabel";
-    if (tipe === "tabel_keuangan") return "Keuangan";
-    return tipe;
-}
-
-function bukaForm(index) {
-    if (!currentData || !currentData.pengumuman[index]) return;
-    
-    editIndex = index;
-    var page = currentData.pengumuman[index];
-    
-    document.getElementById("form-judul").textContent = "EDIT HALAMAN " + (index + 1);
-    
-    var isi = document.getElementById("form-isi");
-    isi.innerHTML = "";
-    
-    isi.appendChild(buatField("Judul", "text", "field-judul", page.judul || ""));
-    isi.appendChild(buatField("Durasi (detik)", "number", "field-durasi", page.durasi || 10));
-    
-    if (page.type === "text_pendek" || page.type === "text_panjang") {
-        isi.appendChild(buatTextarea("Isi", "field-isi", page.isi || ""));
-    }
-    
-    if (page.type === "tabel_pendek" || page.type === "tabel_panjang") {
-        isi.appendChild(buatTabelCard(page));
-    }
-    
-    if (page.type === "tabel_keuangan") {
-        isi.appendChild(buatField("Saldo Awal (Rp)", "number", "field-saldo", page.saldo_awal || 0));
-        isi.appendChild(buatTabelCard(page));
-    }
-    
-    var info = document.createElement("div");
-    info.className = "info-tipe";
-    info.textContent = "Jenis: " + namaTipe(page.type);
-    isi.appendChild(info);
-    
-    var urutan = document.createElement("div");
-    urutan.className = "urutan-tombol";
-    
-    var btnNaik = document.createElement("button");
-    btnNaik.className = "btn btn-ambil";
-    btnNaik.textContent = "↑ NAIK";
-    btnNaik.onclick = function() { urutkan(index, -1); };
-    
-    var btnTurun = document.createElement("button");
-    btnTurun.className = "btn btn-ambil";
-    btnTurun.textContent = "↓ TURUN";
-    btnTurun.onclick = function() { urutkan(index, 1); };
-    
-    var btnHapus = document.createElement("button");
-    btnHapus.className = "btn btn-merah";
-    btnHapus.textContent = "✕ HAPUS";
-    btnHapus.onclick = function() { hapusHalaman(index); };
-    
-    urutan.appendChild(btnNaik);
-    urutan.appendChild(btnTurun);
-    urutan.appendChild(btnHapus);
-    isi.appendChild(urutan);
-    
-    document.getElementById("form-overlay").classList.add("aktif");
+function tampilkanDaftarCard() {
+    if (!dataCard) return;
+    var c = document.getElementById("daftar-card");
+    c.innerHTML = "";
+    dataCard.card.forEach(function(item, i) {
+        var div = document.createElement("div");
+        div.className = "item-card";
+        div.onclick = function() { bukaFormCard(i); };
+        div.innerHTML = '<div class="nomor">Card ' + (i+1) + '</div>' +
+                        '<div class="judul">' + (item.judul || "-") + '</div>' +
+                        '<div class="subjudul">' + (item.subjudul || "") + ' (' + item.rows.length + ' baris)</div>';
+        c.appendChild(div);
+    });
 }
 
 function buatField(label, tipe, id, nilai) {
     var div = document.createElement("div");
     div.className = "form-group";
-    
-    var lbl = document.createElement("label");
-    lbl.textContent = label;
-    
+    div.innerHTML = '<label>' + label + '</label>';
     var input = document.createElement("input");
     input.type = tipe;
     input.id = id;
     input.value = nilai;
-    
-    div.appendChild(lbl);
     div.appendChild(input);
     return div;
 }
@@ -683,248 +246,219 @@ function buatField(label, tipe, id, nilai) {
 function buatTextarea(label, id, nilai) {
     var div = document.createElement("div");
     div.className = "form-group";
-    
-    var lbl = document.createElement("label");
-    lbl.textContent = label;
-    
+    div.innerHTML = '<label>' + label + '</label>';
     var ta = document.createElement("textarea");
     ta.id = id;
     ta.value = nilai;
-    
-    div.appendChild(lbl);
     div.appendChild(ta);
     return div;
 }
 
-// ==================== CARD LAYOUT UNTUK TABEL ====================
-function buatTabelCard(page) {
-    var div = document.createElement("div");
-    div.className = "card-list";
+function bukaFormText(i) {
+    editIndex = i;
+    editTipe = "text";
+    var item = dataText.text[i];
+    document.getElementById("form-judul").textContent = "EDIT TEXT " + (i+1);
+    var isi = document.getElementById("form-isi");
+    isi.innerHTML = "";
+    isi.appendChild(buatField("Judul", "text", "f-judul", item.judul || ""));
+    isi.appendChild(buatField("Durasi (detik)", "number", "f-durasi", item.durasi || 10));
+    isi.appendChild(buatTextarea("Isi", "f-isi", item.isi || ""));
+    document.getElementById("form-overlay").classList.add("aktif");
+}
+
+function bukaFormCard(i) {
+    editIndex = i;
+    editTipe = "card";
+    var item = dataCard.card[i];
+    document.getElementById("form-judul").textContent = "EDIT CARD " + (i+1);
+    var isi = document.getElementById("form-isi");
+    isi.innerHTML = "";
+    isi.appendChild(buatField("Judul", "text", "f-judul", item.judul || ""));
+    isi.appendChild(buatField("Subjudul", "text", "f-subjudul", item.subjudul || ""));
+    isi.appendChild(buatField("Durasi (detik)", "number", "f-durasi", item.durasi || 10));
     
-    // ===== EDIT HEADER (nama kolom) =====
-    var headerSection = document.createElement("div");
-    headerSection.className = "header-edit-section";
+    var lbl = document.createElement("div");
+    lbl.className = "card-header-label";
+    lbl.textContent = "Header Global (" + item.items.length + " item)";
+    isi.appendChild(lbl);
     
-    var headerLabel = document.createElement("label");
-    headerLabel.textContent = "📋 Nama Kolom:";
-    headerSection.appendChild(headerLabel);
-    
-    page.headers.forEach(function(h, i) {
-        var field = document.createElement("div");
-        field.className = "card-field";
-        
-        var lbl = document.createElement("label");
-        lbl.textContent = "Kolom " + (i + 1);
-        
-        var input = document.createElement("input");
-        input.type = "text";
-        input.value = h;
-        input.setAttribute("data-header", i);
-        
-        field.appendChild(lbl);
-        field.appendChild(input);
-        headerSection.appendChild(field);
+    item.items.forEach(function(h, j) {
+        isi.appendChild(buatField("Item " + (j+1), "text", "f-item-" + j, h));
     });
     
-    div.appendChild(headerSection);
+    var lbl2 = document.createElement("div");
+    lbl2.className = "card-header-label";
+    lbl2.textContent = "Data (" + item.rows.length + " baris)";
+    lbl2.style.marginTop = "15px";
+    isi.appendChild(lbl2);
     
-    // ===== DATA BARIS (card per baris) =====
-    var dataLabel = document.createElement("div");
-    dataLabel.className = "card-header-label";
-    dataLabel.textContent = "📝 Data Baris (" + page.rows.length + " baris)";
-    div.appendChild(dataLabel);
-    
-    page.rows.forEach(function(row, r) {
+    item.rows.forEach(function(row, r) {
         var card = document.createElement("div");
         card.className = "card-item";
-        
-        // Header card: nomor + tombol X
-        var cardHeader = document.createElement("div");
-        cardHeader.className = "card-item-header";
-        
-        var cardNomor = document.createElement("div");
-        cardNomor.className = "card-nomor";
-        cardNomor.textContent = "Baris " + (r + 1);
-        
+        var hdr = document.createElement("div");
+        hdr.className = "card-item-header";
+        hdr.innerHTML = '<div class="card-nomor">Baris ' + (r+1) + '</div>';
         var btnX = document.createElement("button");
         btnX.className = "btn-x-card";
         btnX.textContent = "✕ HAPUS";
         btnX.onclick = function() {
-            simpanFormData();
-            if (page.rows.length > 1) {
-                page.rows.splice(r, 1);
-                bukaForm(editIndex);
-            } else {
-                alert("Minimal harus ada 1 baris");
-            }
+            simpanFormCard();
+            if (item.rows.length > 1) { item.rows.splice(r, 1); bukaFormCard(editIndex); }
         };
+        hdr.appendChild(btnX);
+        card.appendChild(hdr);
         
-        cardHeader.appendChild(cardNomor);
-        cardHeader.appendChild(btnX);
-        card.appendChild(cardHeader);
-        
-        // Field per kolom
-        row.forEach(function(cell, c) {
-            var field = document.createElement("div");
-            field.className = "card-field";
+        row.values.forEach(function(val, c) {
+            var f = document.createElement("div");
+            f.className = "card-field";
+            var hLabel = (row.overrides && row.overrides[c]) ? row.overrides[c] : item.items[c];
+            f.innerHTML = '<label>' + hLabel + ' (header bisa diubah)</label>';
             
-            var lbl = document.createElement("label");
-            lbl.textContent = page.headers[c] || ("Kolom " + (c + 1));
+            var inpHeader = document.createElement("input");
+            inpHeader.type = "text";
+            inpHeader.value = hLabel;
+            inpHeader.setAttribute("data-header-r", r);
+            inpHeader.setAttribute("data-header-c", c);
+            inpHeader.style.marginBottom = "5px";
             
-            var input = document.createElement("input");
-            input.type = "text";
-            input.value = cell;
-            input.setAttribute("data-baris", r);
-            input.setAttribute("data-kolom", c);
+            var inpVal = document.createElement("input");
+            inpVal.type = "text";
+            inpVal.value = val;
+            inpVal.setAttribute("data-val-r", r);
+            inpVal.setAttribute("data-val-c", c);
             
-            field.appendChild(lbl);
-            field.appendChild(input);
-            card.appendChild(field);
+            f.appendChild(inpHeader);
+            f.appendChild(inpVal);
+            card.appendChild(f);
         });
         
-        div.appendChild(card);
+        isi.appendChild(card);
     });
-    
-    // Tombol tambah baris
-    var aksi = document.createElement("div");
-    aksi.className = "aksi-baris";
     
     var btnTambah = document.createElement("button");
     btnTambah.className = "btn btn-kirim";
     btnTambah.textContent = "+ TAMBAH BARIS";
+    btnTambah.style.width = "100%";
+    btnTambah.style.marginTop = "15px";
     btnTambah.onclick = function() {
-        simpanFormData();
-        var kolom = page.jumlah_kolom || page.headers.length;
-        var barisBaru = [];
-        for (var i = 0; i < kolom; i++) barisBaru.push("");
-        page.rows.push(barisBaru);
-        bukaForm(editIndex);
+        simpanFormCard();
+        var barisBaru = { values: [], overrides: null };
+        for (var k = 0; k < item.items.length; k++) barisBaru.values.push("");
+        item.rows.push(barisBaru);
+        bukaFormCard(editIndex);
     };
+    isi.appendChild(btnTambah);
     
-    aksi.appendChild(btnTambah);
-    div.appendChild(aksi);
-    
-    return div;
+    document.getElementById("form-overlay").classList.add("aktif");
 }
 
-function simpanFormData() {
-    if (!currentData || editIndex < 0) return;
+function simpanFormText() {
+    if (editTipe !== "text" || editIndex < 0) return;
+    var item = dataText.text[editIndex];
+    var j = document.getElementById("f-judul");
+    var d = document.getElementById("f-durasi");
+    var i = document.getElementById("f-isi");
+    if (j) item.judul = j.value;
+    if (d) item.durasi = parseInt(d.value) || 10;
+    if (i) item.isi = i.value;
+}
+
+function simpanFormCard() {
+    if (editTipe !== "card" || editIndex < 0) return;
+    var item = dataCard.card[editIndex];
+    var j = document.getElementById("f-judul");
+    var s = document.getElementById("f-subjudul");
+    var d = document.getElementById("f-durasi");
+    if (j) item.judul = j.value;
+    if (s) item.subjudul = s.value;
+    if (d) item.durasi = parseInt(d.value) || 10;
     
-    var page = currentData.pengumuman[editIndex];
-    
-    var judul = document.getElementById("field-judul");
-    if (judul) page.judul = judul.value;
-    
-    var durasi = document.getElementById("field-durasi");
-    if (durasi) page.durasi = parseInt(durasi.value) || 10;
-    
-    var isi = document.getElementById("field-isi");
-    if (isi) page.isi = isi.value;
-    
-    var saldo = document.getElementById("field-saldo");
-    if (saldo) page.saldo_awal = parseInt(saldo.value) || 0;
-    
-    var headerInputs = document.querySelectorAll("[data-header]");
-    headerInputs.forEach(function(input) {
-        var i = parseInt(input.getAttribute("data-header"));
-        if (page.headers) page.headers[i] = input.value;
+    item.items.forEach(function(h, k) {
+        var f = document.getElementById("f-item-" + k);
+        if (f) item.items[k] = f.value;
     });
     
-    var cellInputs = document.querySelectorAll("[data-baris]");
-    cellInputs.forEach(function(input) {
-        var r = parseInt(input.getAttribute("data-baris"));
-        var c = parseInt(input.getAttribute("data-kolom"));
-        if (page.rows && page.rows[r]) page.rows[r][c] = input.value;
+    document.querySelectorAll("[data-header-r]").forEach(function(inp) {
+        var r = parseInt(inp.getAttribute("data-header-r"));
+        var c = parseInt(inp.getAttribute("data-header-c"));
+        if (!item.rows[r].overrides) item.rows[r].overrides = [];
+        item.rows[r].overrides[c] = inp.value;
+    });
+    
+    document.querySelectorAll("[data-val-r]").forEach(function(inp) {
+        var r = parseInt(inp.getAttribute("data-val-r"));
+        var c = parseInt(inp.getAttribute("data-val-c"));
+        item.rows[r].values[c] = inp.value;
     });
 }
 
 function simpanForm() {
-    if (!currentData || editIndex < 0) return;
-    
-    simpanFormData();
-    
-    setStatus("Halaman " + (editIndex + 1) + " disimpan", "hijau");
+    if (editTipe === "text") simpanFormText();
+    else if (editTipe === "card") simpanFormCard();
+    setStatus("Disimpan", "hijau");
     tutupForm();
-    tampilkanDaftar();
+    tampilkanDaftarText();
+    tampilkanDaftarCard();
 }
 
 function tutupForm() {
     document.getElementById("form-overlay").classList.remove("aktif");
     editIndex = -1;
+    editTipe = "";
 }
 
-function urutkan(index, arah) {
-    simpanFormData();
+function kirimData() {
+    if (!dataText || !dataCard) { setStatus("Belum ada data", "merah"); return; }
+    setStatus("Mengirim data...", "biru");
+    var selesai = 0;
+    var gagal = false;
     
-    var target = index + arah;
-    if (target < 0 || target >= currentData.pengumuman.length) return;
+    fetch("http://" + serverIP + ":" + SERVER_PORT + "/text", {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(dataText)
+    }).then(function() { selesai++; if (selesai === 2) selesaiKirim(); })
+      .catch(function() { gagal = true; selesai++; if (selesai === 2) selesaiKirim(); });
     
-    var temp = currentData.pengumuman[index];
-    currentData.pengumuman[index] = currentData.pengumuman[target];
-    currentData.pengumuman[target] = temp;
+    fetch("http://" + serverIP + ":" + SERVER_PORT + "/card", {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(dataCard)
+    }).then(function() { selesai++; if (selesai === 2) selesaiKirim(); })
+      .catch(function() { gagal = true; selesai++; if (selesai === 2) selesaiKirim(); });
     
-    tutupForm();
-    tampilkanDaftar();
-    setStatus("Urutan diubah", "hijau");
-}
-
-function hapusHalaman(index) {
-    if (!confirm("Hapus halaman " + (index + 1) + "?")) return;
-    
-    currentData.pengumuman.splice(index, 1);
-    tutupForm();
-    tampilkanDaftar();
-    setStatus("Halaman dihapus", "hijau");
-}
-
-function tampilkanTambah() {
-    if (!currentData) {
-        setStatus("Ambil data dulu", "merah");
-        return;
+    function selesaiKirim() {
+        if (gagal) setStatus("Gagal kirim sebagian", "merah");
+        else {
+            setStatus("Data BERHASIL dikirim! Editor di-reset.", "hijau");
+            dataText = null; dataCard = null;
+            document.getElementById("daftar-text").innerHTML = "";
+            document.getElementById("daftar-card").innerHTML = "";
+            document.getElementById("btn-kirim").disabled = true;
+        }
     }
-    
-    document.getElementById("modal-tambah").classList.add("aktif");
 }
 
-function tutupModalTambah() {
-    document.getElementById("modal-tambah").classList.remove("aktif");
+function tambahText() {
+    if (!dataText) return;
+    dataText.text.push({ id: Date.now(), judul: "Text Baru", isi: "Isi text di sini", durasi: 15 });
+    tampilkanDaftarText();
 }
 
-function pilihTipe(jenis) {
-    tutupModalTambah();
-    
-    var newPage = {
-        id: Date.now(),
-        durasi: 10
-    };
-    
-    if (jenis === "pengumuman") {
-        newPage.type = "text_panjang";
-        newPage.judul = "Pengumuman Baru";
-        newPage.isi = "Tulis isi pengumuman di sini";
-    } else if (jenis === "tabel") {
-        newPage.type = "tabel_panjang";
-        newPage.judul = "Tabel Baru";
-        newPage.jumlah_kolom = 3;
-        newPage.headers = ["Kolom 1", "Kolom 2", "Kolom 3"];
-        newPage.rows = [["", "", ""]];
-    } else if (jenis === "keuangan") {
-        newPage.type = "tabel_keuangan";
-        newPage.judul = "Laporan Keuangan";
-        newPage.saldo_awal = 0;
-        newPage.jumlah_kolom = 4;
-        newPage.headers = ["Tanggal", "Uraian", "Pemasukan", "Pengeluaran"];
-        newPage.rows = [["", "", "0", "0"]];
-    }
-    
-    currentData.pengumuman.push(newPage);
-    tampilkanDaftar();
-    setStatus("Halaman ditambahkan", "hijau");
+function tambahCard() {
+    if (!dataCard) return;
+    dataCard.card.push({
+        id: Date.now(), judul: "Card Baru", subjudul: "",
+        jumlah_item: 3, items: ["Item 1", "Item 2", "Item 3"],
+        durasi: 15,
+        rows: [
+            { values: ["", "", ""], overrides: null },
+            { values: ["", "", ""], overrides: null }
+        ]
+    });
+    tampilkanDaftarCard();
 }
 
-window.addEventListener("load", function() {
-    deteksiIP();
-});
+window.addEventListener("load", function() { deteksiIP(); });
 </script>
 
 </body>
