@@ -17,7 +17,7 @@ body { background: #d9dde3; color: #000; padding: 15px; padding-bottom: 100px; f
 .btn-ambil { background: #1a5c99; }
 .btn-kirim { background: #0d8033; }
 .btn-merah { background: #cc3333; }
-.btn-abu { background: #666; }
+.btn-oranye { background: #d97000; }
 .tab-bar { display: flex; gap: 10px; margin-bottom: 20px; }
 .tab-bar button { flex: 1; padding: 18px; font-size: 20px; font-weight: bold; border: 2px solid #1a5c99; background: #fff; color: #1a5c99; border-radius: 10px; cursor: pointer; }
 .tab-bar button.aktif { background: #1a5c99; color: #fff; }
@@ -27,11 +27,20 @@ body { background: #d9dde3; color: #000; padding: 15px; padding-bottom: 100px; f
 .status.biru { color: #1a5c99; }
 .label { font-size: 20px; font-weight: bold; margin: 20px 0 10px 0; }
 .daftar-item { display: flex; flex-direction: column; gap: 12px; }
-.item-card { background: #fff; border: 1px solid #aaa; border-radius: 10px; padding: 15px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.item-card:active { background: #eee; }
+.item-card { background: #fff; border: 1px solid #aaa; border-radius: 10px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 .item-card .nomor { font-size: 14px; color: #666; margin-bottom: 5px; }
 .item-card .judul { font-size: 20px; font-weight: bold; margin-bottom: 5px; word-wrap: break-word; }
-.item-card .subjudul { font-size: 14px; color: #888; font-style: italic; }
+.item-card .subjudul { font-size: 14px; color: #888; font-style: italic; margin-bottom: 10px; }
+.item-aksi { display: flex; gap: 8px; }
+.item-aksi .btn-kecil { flex: 1; padding: 10px; font-size: 14px; }
+.item-aksi .btn-buka { background: #1a5c99; }
+.btn-kecil { border: none; border-radius: 6px; padding: 8px 12px; font-size: 14px; font-weight: bold; cursor: pointer; color: #fff; }
+.btn-kecil:active { transform: scale(0.96); }
+.btn-kecil-naik { background: #1a5c99; }
+.btn-kecil-turun { background: #1a5c99; }
+.btn-kecil-hapus { background: #cc3333; }
+.btn-kecil-buka { background: #0d8033; }
+.btn-kecil:disabled { background: #ccc; cursor: not-allowed; }
 .btn-tambah { background: #0d8033; color: #fff; border: none; padding: 25px; font-size: 20px; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 15px; width: 100%; box-shadow: 0 3px 6px rgba(0,0,0,0.2); display: none; }
 .form-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 100; overflow-y: auto; padding: 15px; }
 .form-overlay.aktif { display: block; }
@@ -42,29 +51,20 @@ body { background: #d9dde3; color: #000; padding: 15px; padding-bottom: 100px; f
 .form-group input, .form-group textarea { width: 100%; padding: 14px; font-size: 18px; border: 2px solid #aaa; border-radius: 8px; font-family: inherit; }
 .form-group textarea { min-height: 150px; resize: vertical; }
 .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #1a5c99; }
-.form-tombol { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-.form-tombol .btn { flex: 1; padding: 15px 10px; font-size: 16px; min-width: 80px; }
-.form-tombol-2 { display: flex; gap: 10px; margin-top: 10px; }
-.form-tombol-2 .btn { flex: 1; padding: 18px 10px; font-size: 18px; }
+.form-tombol { display: flex; gap: 12px; margin-top: 20px; }
+.form-tombol .btn { flex: 1; padding: 20px 10px; font-size: 18px; }
 .card-list { margin-top: 15px; }
 .card-header-label { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a5c99; }
 .card-item { background: #f5f5f5; border: 2px solid #1a5c99; border-radius: 12px; padding: 12px; margin-bottom: 12px; }
 .card-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #ccc; flex-wrap: wrap; gap: 5px; }
 .card-nomor { font-size: 16px; font-weight: bold; color: #1a5c99; }
 .card-aksi { display: flex; gap: 5px; }
-.btn-kecil { border: none; border-radius: 6px; padding: 6px 10px; font-size: 14px; font-weight: bold; cursor: pointer; color: #fff; }
-.btn-kecil-naik { background: #1a5c99; }
-.btn-kecil-turun { background: #1a5c99; }
-.btn-kecil-hapus { background: #cc3333; }
 .card-field { margin-bottom: 10px; }
 .card-field:last-child { margin-bottom: 0; }
 .card-field label { display: block; font-size: 14px; font-weight: bold; color: #555; margin-bottom: 4px; }
 .card-field input { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ccc; border-radius: 8px; font-family: inherit; background: #fff; }
 .card-field input.header-input { background: #eef4fa; border-color: #1a5c99; }
-.header-edit-section { background: #eef4fa; border-radius: 10px; padding: 12px; margin-bottom: 15px; border: 1px solid #1a5c99; }
-.header-edit-section label { display: block; font-size: 16px; font-weight: bold; color: #1a5c99; margin-bottom: 8px; }
 .hidden { display: none !important; }
-.info-jumlah { background: #fff8e0; border: 1px solid #e0c060; border-radius: 8px; padding: 10px; margin-bottom: 15px; font-size: 14px; color: #806000; }
 </style>
 </head>
 <body>
@@ -102,14 +102,9 @@ body { background: #d9dde3; color: #000; padding: 15px; padding-bottom: 100px; f
     <div class="form-kotak">
         <h2 id="form-judul">EDIT</h2>
         <div id="form-isi"></div>
-        <div class="form-tombol">
-            <button class="btn btn-ambil" onclick="naikHalaman()">↑ NAIK</button>
-            <button class="btn btn-ambil" onclick="turunHalaman()">↓ TURUN</button>
-            <button class="btn btn-merah" onclick="hapusHalaman()">✕ HAPUS</button>
-        </div>
-        <div class="form-tombol-2">
+        <div class="form-tombol" id="form-tombol">
             <button class="btn btn-kirim" onclick="simpanForm()">SIMPAN</button>
-            <button class="btn btn-abu" onclick="tutupForm()">TUTUP</button>
+            <button class="btn btn-oranye" id="btn-tutup" onclick="tutupForm()">TUTUP</button>
         </div>
     </div>
 </div>
@@ -122,6 +117,7 @@ var dataTabel = null;
 var tabAktif = "tabel";
 var editIndex = -1;
 var editTipe = "";
+var modeTambah = false;
 
 function getGatewayIP() {
     try {
@@ -206,6 +202,7 @@ function selesaiAmbil() {
     document.getElementById("btn-tambah-teks").style.display = "block";
 }
 
+// ==================== DAFTAR TABEL ====================
 function tampilkanDaftarTabel() {
     if (!dataTabel) return;
     var c = document.getElementById("daftar-tabel");
@@ -213,14 +210,49 @@ function tampilkanDaftarTabel() {
     dataTabel.card.forEach(function(item, i) {
         var div = document.createElement("div");
         div.className = "item-card";
-        div.onclick = function() { bukaFormTabel(i); };
-        div.innerHTML = '<div class="nomor">Halaman Tabel ' + (i+1) + '</div>' +
-                        '<div class="judul">' + (item.judul || "-") + '</div>' +
-                        '<div class="subjudul">' + (item.subjudul || "") + ' (' + item.rows.length + ' baris, ' + item.items.length + ' data)</div>';
+        
+        var h = document.createElement("div");
+        h.innerHTML = '<div class="nomor">Halaman Tabel ' + (i+1) + '</div>' +
+                      '<div class="judul">' + (item.judul || "-") + '</div>' +
+                      '<div class="subjudul">' + (item.subjudul || "") + ' (' + item.rows.length + ' baris, ' + item.items.length + ' data)</div>';
+        div.appendChild(h);
+        
+        var aksi = document.createElement("div");
+        aksi.className = "item-aksi";
+        
+        var btnNaik = document.createElement("button");
+        btnNaik.className = "btn-kecil btn-kecil-naik";
+        btnNaik.textContent = "↑ NAIK";
+        btnNaik.disabled = (i === 0);
+        btnNaik.onclick = function() { naikHalamanTabel(i); };
+        
+        var btnTurun = document.createElement("button");
+        btnTurun.className = "btn-kecil btn-kecil-turun";
+        btnTurun.textContent = "↓ TURUN";
+        btnTurun.disabled = (i === dataTabel.card.length - 1);
+        btnTurun.onclick = function() { turunHalamanTabel(i); };
+        
+        var btnHapus = document.createElement("button");
+        btnHapus.className = "btn-kecil btn-kecil-hapus";
+        btnHapus.textContent = "✕ HAPUS";
+        btnHapus.onclick = function() { hapusHalamanTabel(i); };
+        
+        var btnBuka = document.createElement("button");
+        btnBuka.className = "btn-kecil btn-kecil-buka";
+        btnBuka.textContent = "📝 EDIT";
+        btnBuka.onclick = function() { modeTambah = false; bukaFormTabel(i); };
+        
+        aksi.appendChild(btnNaik);
+        aksi.appendChild(btnTurun);
+        aksi.appendChild(btnHapus);
+        aksi.appendChild(btnBuka);
+        div.appendChild(aksi);
+        
         c.appendChild(div);
     });
 }
 
+// ==================== DAFTAR TEKS ====================
 function tampilkanDaftarTeks() {
     if (!dataTeks) return;
     var c = document.getElementById("daftar-teks");
@@ -228,14 +260,101 @@ function tampilkanDaftarTeks() {
     dataTeks.text.forEach(function(item, i) {
         var div = document.createElement("div");
         div.className = "item-card";
-        div.onclick = function() { bukaFormTeks(i); };
-        div.innerHTML = '<div class="nomor">Halaman Teks ' + (i+1) + '</div>' +
-                        '<div class="judul">' + (item.judul || "-") + '</div>' +
-                        '<div class="subjudul">Durasi: ' + (item.durasi || 10) + ' detik</div>';
+        
+        var h = document.createElement("div");
+        h.innerHTML = '<div class="nomor">Halaman Teks ' + (i+1) + '</div>' +
+                      '<div class="judul">' + (item.judul || "-") + '</div>' +
+                      '<div class="subjudul">Durasi: ' + (item.durasi || 10) + ' detik</div>';
+        div.appendChild(h);
+        
+        var aksi = document.createElement("div");
+        aksi.className = "item-aksi";
+        
+        var btnNaik = document.createElement("button");
+        btnNaik.className = "btn-kecil btn-kecil-naik";
+        btnNaik.textContent = "↑ NAIK";
+        btnNaik.disabled = (i === 0);
+        btnNaik.onclick = function() { naikHalamanTeks(i); };
+        
+        var btnTurun = document.createElement("button");
+        btnTurun.className = "btn-kecil btn-kecil-turun";
+        btnTurun.textContent = "↓ TURUN";
+        btnTurun.disabled = (i === dataTeks.text.length - 1);
+        btnTurun.onclick = function() { turunHalamanTeks(i); };
+        
+        var btnHapus = document.createElement("button");
+        btnHapus.className = "btn-kecil btn-kecil-hapus";
+        btnHapus.textContent = "✕ HAPUS";
+        btnHapus.onclick = function() { hapusHalamanTeks(i); };
+        
+        var btnBuka = document.createElement("button");
+        btnBuka.className = "btn-kecil btn-kecil-buka";
+        btnBuka.textContent = "📝 EDIT";
+        btnBuka.onclick = function() { modeTambah = false; bukaFormTeks(i); };
+        
+        aksi.appendChild(btnNaik);
+        aksi.appendChild(btnTurun);
+        aksi.appendChild(btnHapus);
+        aksi.appendChild(btnBuka);
+        div.appendChild(aksi);
+        
         c.appendChild(div);
     });
 }
 
+// ==================== HALAMAN TABEL: NAIK/TURUN/HAPUS ====================
+function naikHalamanTabel(i) {
+    if (i <= 0) return;
+    var temp = dataTabel.card[i];
+    dataTabel.card[i] = dataTabel.card[i-1];
+    dataTabel.card[i-1] = temp;
+    tampilkanDaftarTabel();
+    setStatus("Halaman tabel dipindah ke atas", "hijau");
+}
+
+function turunHalamanTabel(i) {
+    if (i >= dataTabel.card.length - 1) return;
+    var temp = dataTabel.card[i];
+    dataTabel.card[i] = dataTabel.card[i+1];
+    dataTabel.card[i+1] = temp;
+    tampilkanDaftarTabel();
+    setStatus("Halaman tabel dipindah ke bawah", "hijau");
+}
+
+function hapusHalamanTabel(i) {
+    if (!confirm("Hapus halaman tabel " + (i+1) + "?")) return;
+    dataTabel.card.splice(i, 1);
+    tampilkanDaftarTabel();
+    setStatus("Halaman tabel dihapus", "hijau");
+}
+
+// ==================== HALAMAN TEKS: NAIK/TURUN/HAPUS ====================
+function naikHalamanTeks(i) {
+    if (i <= 0) return;
+    var temp = dataTeks.text[i];
+    dataTeks.text[i] = dataTeks.text[i-1];
+    dataTeks.text[i-1] = temp;
+    tampilkanDaftarTeks();
+    setStatus("Halaman teks dipindah ke atas", "hijau");
+}
+
+function turunHalamanTeks(i) {
+    if (i >= dataTeks.text.length - 1) return;
+    var temp = dataTeks.text[i];
+    dataTeks.text[i] = dataTeks.text[i+1];
+    dataTeks.text[i+1] = temp;
+    tampilkanDaftarTeks();
+    setStatus("Halaman teks dipindah ke bawah", "hijau");
+}
+
+function hapusHalamanTeks(i) {
+    if (!confirm("Hapus halaman teks " + (i+1) + "?")) return;
+    dataTeks.text.splice(i, 1);
+    tampilkanDaftarTeks();
+    setStatus("Halaman teks dihapus", "hijau");
+}
+
+// ==================== FIELD ====================
 function buatField(label, tipe, id, nilai) {
     var div = document.createElement("div");
     div.className = "form-group";
@@ -264,7 +383,17 @@ function bukaFormTeks(i) {
     editIndex = i;
     editTipe = "teks";
     var item = dataTeks.text[i];
-    document.getElementById("form-judul").textContent = "EDIT HALAMAN TEKS " + (i+1);
+    
+    document.getElementById("form-judul").textContent = modeTambah ? "TAMBAH HALAMAN TEKS" : "EDIT HALAMAN TEKS " + (i+1);
+    
+    // Atur tombol tutup/batal
+    var btnTutup = document.getElementById("btn-tutup");
+    if (modeTambah) {
+        btnTutup.textContent = "BATAL";
+    } else {
+        btnTutup.textContent = "TUTUP";
+    }
+    
     var isi = document.getElementById("form-isi");
     isi.innerHTML = "";
     isi.appendChild(buatField("Judul", "text", "f-judul", item.judul || ""));
@@ -278,14 +407,22 @@ function bukaFormTabel(i) {
     editIndex = i;
     editTipe = "tabel";
     var item = dataTabel.card[i];
-    document.getElementById("form-judul").textContent = "EDIT HALAMAN TABEL " + (i+1);
+    
+    document.getElementById("form-judul").textContent = modeTambah ? "TAMBAH HALAMAN TABEL" : "EDIT HALAMAN TABEL " + (i+1);
+    
+    var btnTutup = document.getElementById("btn-tutup");
+    if (modeTambah) {
+        btnTutup.textContent = "BATAL";
+    } else {
+        btnTutup.textContent = "TUTUP";
+    }
+    
     var isi = document.getElementById("form-isi");
     isi.innerHTML = "";
     isi.appendChild(buatField("Judul", "text", "f-judul", item.judul || ""));
     isi.appendChild(buatField("Subjudul", "text", "f-subjudul", item.subjudul || ""));
     isi.appendChild(buatField("Durasi (detik)", "number", "f-durasi", item.durasi || 10));
     
-    // Field Jumlah Data
     var fieldJumlah = buatField("Jumlah Data", "number", "f-jumlah", item.items.length);
     fieldJumlah.querySelector("input").onchange = function() {
         var jumlahBaru = parseInt(this.value) || 1;
@@ -312,7 +449,6 @@ function bukaFormTabel(i) {
     };
     isi.appendChild(fieldJumlah);
     
-    // Field Nama Data (header global)
     var lbl = document.createElement("div");
     lbl.className = "card-header-label";
     lbl.textContent = "Nama Data (Header Global)";
@@ -322,7 +458,6 @@ function bukaFormTabel(i) {
         isi.appendChild(buatField("Data " + (j+1), "text", "f-item-" + j, h));
     });
     
-    // Data (baris)
     var lbl2 = document.createElement("div");
     lbl2.className = "card-header-label";
     lbl2.textContent = "Data (" + item.rows.length + " baris)";
@@ -405,7 +540,7 @@ function bukaFormTabel(i) {
     document.getElementById("form-overlay").classList.add("aktif");
 }
 
-// ==================== BARIS: NAIK / TURUN / HAPUS ====================
+// ==================== BARIS ====================
 function naikBaris(r) {
     if (r <= 0) return;
     var item = dataTabel.card[editIndex];
@@ -433,67 +568,6 @@ function hapusBaris(r) {
         item.rows.splice(r, 1);
         bukaFormTabel(editIndex);
     }
-}
-
-// ==================== HALAMAN: NAIK / TURUN / HAPUS ====================
-function naikHalaman() {
-    if (editIndex <= 0) return;
-    if (editTipe === "teks") {
-        simpanFormTeks();
-        var temp = dataTeks.text[editIndex];
-        dataTeks.text[editIndex] = dataTeks.text[editIndex-1];
-        dataTeks.text[editIndex-1] = temp;
-        editIndex--;
-    } else if (editTipe === "tabel") {
-        simpanFormTabel();
-        var temp = dataTabel.card[editIndex];
-        dataTabel.card[editIndex] = dataTabel.card[editIndex-1];
-        dataTabel.card[editIndex-1] = temp;
-        editIndex--;
-    }
-    setStatus("Halaman dipindah ke atas", "hijau");
-    if (editTipe === "teks") bukaFormTeks(editIndex);
-    else bukaFormTabel(editIndex);
-    tampilkanDaftarTabel();
-    tampilkanDaftarTeks();
-}
-
-function turunHalaman() {
-    if (editTipe === "teks") {
-        if (editIndex >= dataTeks.text.length - 1) return;
-        simpanFormTeks();
-        var temp = dataTeks.text[editIndex];
-        dataTeks.text[editIndex] = dataTeks.text[editIndex+1];
-        dataTeks.text[editIndex+1] = temp;
-        editIndex++;
-    } else if (editTipe === "tabel") {
-        if (editIndex >= dataTabel.card.length - 1) return;
-        simpanFormTabel();
-        var temp = dataTabel.card[editIndex];
-        dataTabel.card[editIndex] = dataTabel.card[editIndex+1];
-        dataTabel.card[editIndex+1] = temp;
-        editIndex++;
-    }
-    setStatus("Halaman dipindah ke bawah", "hijau");
-    if (editTipe === "teks") bukaFormTeks(editIndex);
-    else bukaFormTabel(editIndex);
-    tampilkanDaftarTabel();
-    tampilkanDaftarTeks();
-}
-
-function hapusHalaman() {
-    if (!confirm("Hapus halaman ini?")) return;
-    
-    if (editTipe === "teks") {
-        dataTeks.text.splice(editIndex, 1);
-    } else if (editTipe === "tabel") {
-        dataTabel.card.splice(editIndex, 1);
-    }
-    
-    setStatus("Halaman dihapus", "hijau");
-    tutupForm();
-    tampilkanDaftarTabel();
-    tampilkanDaftarTeks();
 }
 
 // ==================== SIMPAN ====================
@@ -540,13 +614,33 @@ function simpanFormTabel() {
 function simpanForm() {
     if (editTipe === "teks") simpanFormTeks();
     else if (editTipe === "tabel") simpanFormTabel();
-    setStatus("Disimpan", "hijau");
+    
+    if (modeTambah) {
+        setStatus("Halaman baru disimpan", "hijau");
+        modeTambah = false;
+    } else {
+        setStatus("Disimpan", "hijau");
+    }
+    
     tutupForm();
     tampilkanDaftarTabel();
     tampilkanDaftarTeks();
 }
 
 function tutupForm() {
+    // Kalau mode tambah, hapus halaman yang baru ditambah
+    if (modeTambah) {
+        if (editTipe === "tabel" && editIndex >= 0) {
+            dataTabel.card.splice(editIndex, 1);
+        } else if (editTipe === "teks" && editIndex >= 0) {
+            dataTeks.text.splice(editIndex, 1);
+        }
+        modeTambah = false;
+        setStatus("Penambahan dibatalkan", "merah");
+        tampilkanDaftarTabel();
+        tampilkanDaftarTeks();
+    }
+    
     document.getElementById("form-overlay").classList.remove("aktif");
     editIndex = -1;
     editTipe = "";
@@ -592,7 +686,8 @@ function kirimData() {
 function tambahTeks() {
     if (!dataTeks) return;
     dataTeks.text.push({ id: Date.now(), judul: "Teks Baru", isi: "Isi teks di sini", durasi: 15 });
-    tampilkanDaftarTeks();
+    modeTambah = true;
+    bukaFormTeks(dataTeks.text.length - 1);
 }
 
 function tambahTabel() {
@@ -607,11 +702,5 @@ function tambahTabel() {
             { values: ["", "", ""], overrides: null }
         ]
     });
-    tampilkanDaftarTabel();
-}
-
-window.addEventListener("load", function() { deteksiIP(); });
-</script>
-
-</body>
-</html>
+    modeTambah = true;
+    bukaFormTabel(dataTabel.card.length - 1);
