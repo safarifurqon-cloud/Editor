@@ -10,16 +10,17 @@ body { background: #d9dde3; color: #000; padding: 15px; padding-bottom: 100px; f
 .header { text-align: center; margin-bottom: 15px; }
 .header h1 { font-size: 28px; font-weight: bold; margin-bottom: 5px; }
 .header .ip-info { font-size: 14px; color: #555; }
-.tab-bar { display: flex; gap: 10px; margin-bottom: 20px; }
-.tab-bar button { flex: 1; padding: 15px; font-size: 18px; font-weight: bold; border: 2px solid #1a5c99; background: #fff; color: #1a5c99; border-radius: 10px; cursor: pointer; }
-.tab-bar button.aktif { background: #1a5c99; color: #fff; }
-.tombol-utama { display: flex; gap: 12px; margin-bottom: 20px; }
+.tombol-utama { display: flex; gap: 12px; margin-bottom: 15px; }
 .btn { flex: 1; padding: 22px 15px; font-size: 20px; font-weight: bold; color: #fff; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
 .btn:active { transform: scale(0.97); }
 .btn:disabled { background: #999 !important; cursor: not-allowed; opacity: 0.5; }
 .btn-ambil { background: #1a5c99; }
 .btn-kirim { background: #0d8033; }
 .btn-merah { background: #cc3333; }
+.btn-abu { background: #666; }
+.tab-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+.tab-bar button { flex: 1; padding: 18px; font-size: 20px; font-weight: bold; border: 2px solid #1a5c99; background: #fff; color: #1a5c99; border-radius: 10px; cursor: pointer; }
+.tab-bar button.aktif { background: #1a5c99; color: #fff; }
 .status { background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 15px; font-size: 16px; font-weight: bold; min-height: 30px; text-align: center; border: 1px solid #aaa; }
 .status.hijau { color: #0d8033; }
 .status.merah { color: #cc3333; }
@@ -41,33 +42,29 @@ body { background: #d9dde3; color: #000; padding: 15px; padding-bottom: 100px; f
 .form-group input, .form-group textarea { width: 100%; padding: 14px; font-size: 18px; border: 2px solid #aaa; border-radius: 8px; font-family: inherit; }
 .form-group textarea { min-height: 150px; resize: vertical; }
 .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #1a5c99; }
-.form-tombol { display: flex; gap: 12px; margin-top: 20px; }
-.form-tombol .btn { flex: 1; padding: 18px 10px; font-size: 18px; }
+.form-tombol { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+.form-tombol .btn { flex: 1; padding: 15px 10px; font-size: 16px; min-width: 80px; }
+.form-tombol-2 { display: flex; gap: 10px; margin-top: 10px; }
+.form-tombol-2 .btn { flex: 1; padding: 18px 10px; font-size: 18px; }
 .card-list { margin-top: 15px; }
 .card-header-label { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a5c99; }
 .card-item { background: #f5f5f5; border: 2px solid #1a5c99; border-radius: 12px; padding: 12px; margin-bottom: 12px; }
-.card-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #ccc; }
+.card-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #ccc; flex-wrap: wrap; gap: 5px; }
 .card-nomor { font-size: 16px; font-weight: bold; color: #1a5c99; }
-.btn-x-card { background: #cc3333; color: #fff; border: none; border-radius: 6px; padding: 8px 14px; font-size: 16px; font-weight: bold; cursor: pointer; }
+.card-aksi { display: flex; gap: 5px; }
+.btn-kecil { border: none; border-radius: 6px; padding: 6px 10px; font-size: 14px; font-weight: bold; cursor: pointer; color: #fff; }
+.btn-kecil-naik { background: #1a5c99; }
+.btn-kecil-turun { background: #1a5c99; }
+.btn-kecil-hapus { background: #cc3333; }
 .card-field { margin-bottom: 10px; }
 .card-field:last-child { margin-bottom: 0; }
 .card-field label { display: block; font-size: 14px; font-weight: bold; color: #555; margin-bottom: 4px; }
 .card-field input { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ccc; border-radius: 8px; font-family: inherit; background: #fff; }
+.card-field input.header-input { background: #eef4fa; border-color: #1a5c99; }
 .header-edit-section { background: #eef4fa; border-radius: 10px; padding: 12px; margin-bottom: 15px; border: 1px solid #1a5c99; }
 .header-edit-section label { display: block; font-size: 16px; font-weight: bold; color: #1a5c99; margin-bottom: 8px; }
-.aksi-baris { display: flex; gap: 8px; margin-top: 15px; }
-.aksi-baris .btn { flex: 1; padding: 15px; font-size: 16px; }
-.urutan-tombol { display: flex; gap: 8px; margin-top: 15px; }
-.urutan-tombol .btn { flex: 1; padding: 15px; font-size: 16px; }
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 200; padding: 20px; }
-.modal-overlay.aktif { display: block; }
-.modal-kotak { background: #fff; border-radius: 15px; padding: 25px; max-width: 500px; margin: 100px auto; }
-.modal-kotak h2 { font-size: 22px; margin-bottom: 20px; text-align: center; }
-.modal-pilihan { display: flex; flex-direction: column; gap: 12px; }
-.modal-pilihan button { padding: 22px; font-size: 18px; font-weight: bold; border: 2px solid #1a5c99; background: #fff; color: #1a5c99; border-radius: 10px; cursor: pointer; text-align: left; }
-.modal-pilihan button:active { background: #1a5c99; color: #fff; }
-.modal-pilihan button .keterangan { display: block; font-size: 13px; font-weight: normal; color: #666; margin-top: 5px; }
 .hidden { display: none !important; }
+.info-jumlah { background: #fff8e0; border: 1px solid #e0c060; border-radius: 8px; padding: 10px; margin-bottom: 15px; font-size: 14px; color: #806000; }
 </style>
 </head>
 <body>
@@ -77,28 +74,28 @@ body { background: #d9dde3; color: #000; padding: 15px; padding-bottom: 100px; f
     <div class="ip-info" id="info-ip">Mendeteksi IP...</div>
 </div>
 
-<div class="tab-bar">
-    <button id="tab-text" class="aktif" onclick="pilihTab('text')">TEXT (Kanan)</button>
-    <button id="tab-card" onclick="pilihTab('card')">CARD (Kiri)</button>
+<div class="tombol-utama">
+    <button class="btn btn-ambil" id="btn-ambil" onclick="ambilData()">AMBIL DATA</button>
+    <button class="btn btn-kirim" id="btn-kirim" onclick="kirimData()" disabled>KIRIM DATA</button>
 </div>
 
-<div class="tombol-utama">
-    <button class="btn btn-ambil" onclick="ambilData()">AMBIL DATA</button>
-    <button class="btn btn-kirim" id="btn-kirim" onclick="kirimData()" disabled>KIRIM DATA</button>
+<div class="tab-bar" id="tab-bar" style="display:none;">
+    <button id="tab-tabel" class="aktif" onclick="pilihTab('tabel')">TABEL (Kiri)</button>
+    <button id="tab-teks" onclick="pilihTab('teks')">TEKS (Kanan)</button>
 </div>
 
 <div class="status" id="status">Tekan AMBIL DATA untuk mulai</div>
 
-<div id="area-text">
-    <div class="label">DAFTAR TEXT</div>
-    <div class="daftar-item" id="daftar-text"></div>
-    <button class="btn-tambah" id="btn-tambah-text" onclick="tambahText()">+ TAMBAH TEXT</button>
+<div id="area-tabel" class="hidden">
+    <div class="label">DAFTAR HALAMAN TABEL</div>
+    <div class="daftar-item" id="daftar-tabel"></div>
+    <button class="btn-tambah" id="btn-tambah-tabel" onclick="tambahTabel()">+ TAMBAH HALAMAN TABEL</button>
 </div>
 
-<div id="area-card" class="hidden">
-    <div class="label">DAFTAR CARD</div>
-    <div class="daftar-item" id="daftar-card"></div>
-    <button class="btn-tambah" id="btn-tambah-card" onclick="tambahCard()">+ TAMBAH CARD</button>
+<div id="area-teks" class="hidden">
+    <div class="label">DAFTAR HALAMAN TEKS</div>
+    <div class="daftar-item" id="daftar-teks"></div>
+    <button class="btn-tambah" id="btn-tambah-teks" onclick="tambahTeks()">+ TAMBAH HALAMAN TEKS</button>
 </div>
 
 <div class="form-overlay" id="form-overlay">
@@ -106,8 +103,13 @@ body { background: #d9dde3; color: #000; padding: 15px; padding-bottom: 100px; f
         <h2 id="form-judul">EDIT</h2>
         <div id="form-isi"></div>
         <div class="form-tombol">
+            <button class="btn btn-ambil" onclick="naikHalaman()">↑ NAIK</button>
+            <button class="btn btn-ambil" onclick="turunHalaman()">↓ TURUN</button>
+            <button class="btn btn-merah" onclick="hapusHalaman()">✕ HAPUS</button>
+        </div>
+        <div class="form-tombol-2">
             <button class="btn btn-kirim" onclick="simpanForm()">SIMPAN</button>
-            <button class="btn btn-merah" onclick="tutupForm()">TUTUP</button>
+            <button class="btn btn-abu" onclick="tutupForm()">TUTUP</button>
         </div>
     </div>
 </div>
@@ -115,9 +117,9 @@ body { background: #d9dde3; color: #000; padding: 15px; padding-bottom: 100px; f
 <script>
 var SERVER_PORT = 8080;
 var serverIP = "192.168.43.1";
-var dataText = null;
-var dataCard = null;
-var tabAktif = "text";
+var dataTeks = null;
+var dataTabel = null;
+var tabAktif = "tabel";
 var editIndex = -1;
 var editTipe = "";
 
@@ -153,10 +155,10 @@ function setStatus(pesan, warna) {
 
 function pilihTab(tab) {
     tabAktif = tab;
-    document.getElementById("tab-text").className = (tab === "text") ? "aktif" : "";
-    document.getElementById("tab-card").className = (tab === "card") ? "aktif" : "";
-    document.getElementById("area-text").className = (tab === "text") ? "" : "hidden";
-    document.getElementById("area-card").className = (tab === "card") ? "" : "hidden";
+    document.getElementById("tab-tabel").className = (tab === "tabel") ? "aktif" : "";
+    document.getElementById("tab-teks").className = (tab === "teks") ? "aktif" : "";
+    document.getElementById("area-tabel").className = (tab === "tabel") ? "" : "hidden";
+    document.getElementById("area-teks").className = (tab === "teks") ? "" : "hidden";
 }
 
 function ambilData() {
@@ -168,7 +170,7 @@ function ambilData() {
         .then(function(t) {
             try {
                 var d = JSON.parse(t);
-                if (d && d.text) dataText = d;
+                if (d && d.text) dataTeks = d;
             } catch(e) {}
             selesai++;
             if (selesai === 2) selesaiAmbil();
@@ -180,7 +182,7 @@ function ambilData() {
         .then(function(t) {
             try {
                 var d = JSON.parse(t);
-                if (d && d.card) dataCard = d;
+                if (d && d.card) dataTabel = d;
             } catch(e) {}
             selesai++;
             if (selesai === 2) selesaiAmbil();
@@ -189,44 +191,47 @@ function ambilData() {
 }
 
 function selesaiAmbil() {
-    if (!dataText || !dataCard) {
+    if (!dataTeks || !dataTabel) {
         setStatus("Gagal ambil data", "merah");
         return;
     }
-    setStatus("Data diambil: " + dataText.text.length + " text, " + dataCard.card.length + " card", "hijau");
-    tampilkanDaftarText();
-    tampilkanDaftarCard();
+    setStatus("Data diambil: " + dataTabel.card.length + " tabel, " + dataTeks.text.length + " teks", "hijau");
+    tampilkanDaftarTabel();
+    tampilkanDaftarTeks();
+    
     document.getElementById("btn-kirim").disabled = false;
-    document.getElementById("btn-tambah-text").style.display = "block";
-    document.getElementById("btn-tambah-card").style.display = "block";
+    document.getElementById("tab-bar").style.display = "flex";
+    document.getElementById("area-tabel").className = "";
+    document.getElementById("btn-tambah-tabel").style.display = "block";
+    document.getElementById("btn-tambah-teks").style.display = "block";
 }
 
-function tampilkanDaftarText() {
-    if (!dataText) return;
-    var c = document.getElementById("daftar-text");
+function tampilkanDaftarTabel() {
+    if (!dataTabel) return;
+    var c = document.getElementById("daftar-tabel");
     c.innerHTML = "";
-    dataText.text.forEach(function(item, i) {
+    dataTabel.card.forEach(function(item, i) {
         var div = document.createElement("div");
         div.className = "item-card";
-        div.onclick = function() { bukaFormText(i); };
-        div.innerHTML = '<div class="nomor">Text ' + (i+1) + '</div>' +
+        div.onclick = function() { bukaFormTabel(i); };
+        div.innerHTML = '<div class="nomor">Halaman Tabel ' + (i+1) + '</div>' +
                         '<div class="judul">' + (item.judul || "-") + '</div>' +
-                        '<div class="subjudul">Durasi: ' + (item.durasi || 10) + ' detik</div>';
+                        '<div class="subjudul">' + (item.subjudul || "") + ' (' + item.rows.length + ' baris, ' + item.items.length + ' data)</div>';
         c.appendChild(div);
     });
 }
 
-function tampilkanDaftarCard() {
-    if (!dataCard) return;
-    var c = document.getElementById("daftar-card");
+function tampilkanDaftarTeks() {
+    if (!dataTeks) return;
+    var c = document.getElementById("daftar-teks");
     c.innerHTML = "";
-    dataCard.card.forEach(function(item, i) {
+    dataTeks.text.forEach(function(item, i) {
         var div = document.createElement("div");
         div.className = "item-card";
-        div.onclick = function() { bukaFormCard(i); };
-        div.innerHTML = '<div class="nomor">Card ' + (i+1) + '</div>' +
+        div.onclick = function() { bukaFormTeks(i); };
+        div.innerHTML = '<div class="nomor">Halaman Teks ' + (i+1) + '</div>' +
                         '<div class="judul">' + (item.judul || "-") + '</div>' +
-                        '<div class="subjudul">' + (item.subjudul || "") + ' (' + item.rows.length + ' baris)</div>';
+                        '<div class="subjudul">Durasi: ' + (item.durasi || 10) + ' detik</div>';
         c.appendChild(div);
     });
 }
@@ -254,11 +259,12 @@ function buatTextarea(label, id, nilai) {
     return div;
 }
 
-function bukaFormText(i) {
+// ==================== FORM TEKS ====================
+function bukaFormTeks(i) {
     editIndex = i;
-    editTipe = "text";
-    var item = dataText.text[i];
-    document.getElementById("form-judul").textContent = "EDIT TEXT " + (i+1);
+    editTipe = "teks";
+    var item = dataTeks.text[i];
+    document.getElementById("form-judul").textContent = "EDIT HALAMAN TEKS " + (i+1);
     var isi = document.getElementById("form-isi");
     isi.innerHTML = "";
     isi.appendChild(buatField("Judul", "text", "f-judul", item.judul || ""));
@@ -267,26 +273,56 @@ function bukaFormText(i) {
     document.getElementById("form-overlay").classList.add("aktif");
 }
 
-function bukaFormCard(i) {
+// ==================== FORM TABEL ====================
+function bukaFormTabel(i) {
     editIndex = i;
-    editTipe = "card";
-    var item = dataCard.card[i];
-    document.getElementById("form-judul").textContent = "EDIT CARD " + (i+1);
+    editTipe = "tabel";
+    var item = dataTabel.card[i];
+    document.getElementById("form-judul").textContent = "EDIT HALAMAN TABEL " + (i+1);
     var isi = document.getElementById("form-isi");
     isi.innerHTML = "";
     isi.appendChild(buatField("Judul", "text", "f-judul", item.judul || ""));
     isi.appendChild(buatField("Subjudul", "text", "f-subjudul", item.subjudul || ""));
     isi.appendChild(buatField("Durasi (detik)", "number", "f-durasi", item.durasi || 10));
     
+    // Field Jumlah Data
+    var fieldJumlah = buatField("Jumlah Data", "number", "f-jumlah", item.items.length);
+    fieldJumlah.querySelector("input").onchange = function() {
+        var jumlahBaru = parseInt(this.value) || 1;
+        if (jumlahBaru < 1) jumlahBaru = 1;
+        if (jumlahBaru > 6) jumlahBaru = 6;
+        
+        while (item.items.length < jumlahBaru) {
+            item.items.push("Data " + (item.items.length + 1));
+        }
+        while (item.items.length > jumlahBaru) {
+            item.items.pop();
+        }
+        
+        item.rows.forEach(function(row) {
+            while (row.values.length < jumlahBaru) row.values.push("");
+            while (row.values.length > jumlahBaru) row.values.pop();
+            if (row.overrides) {
+                while (row.overrides.length < jumlahBaru) row.overrides.push("");
+                while (row.overrides.length > jumlahBaru) row.overrides.pop();
+            }
+        });
+        
+        bukaFormTabel(editIndex);
+    };
+    isi.appendChild(fieldJumlah);
+    
+    // Field Nama Data (header global)
     var lbl = document.createElement("div");
     lbl.className = "card-header-label";
-    lbl.textContent = "Header Global (" + item.items.length + " item)";
+    lbl.textContent = "Nama Data (Header Global)";
     isi.appendChild(lbl);
     
     item.items.forEach(function(h, j) {
-        isi.appendChild(buatField("Item " + (j+1), "text", "f-item-" + j, h));
+        isi.appendChild(buatField("Data " + (j+1), "text", "f-item-" + j, h));
     });
     
+    // Data (baris)
     var lbl2 = document.createElement("div");
     lbl2.className = "card-header-label";
     lbl2.textContent = "Data (" + item.rows.length + " baris)";
@@ -299,24 +335,40 @@ function bukaFormCard(i) {
         var hdr = document.createElement("div");
         hdr.className = "card-item-header";
         hdr.innerHTML = '<div class="card-nomor">Baris ' + (r+1) + '</div>';
+        
+        var aksi = document.createElement("div");
+        aksi.className = "card-aksi";
+        
+        var btnNaik = document.createElement("button");
+        btnNaik.className = "btn-kecil btn-kecil-naik";
+        btnNaik.textContent = "↑";
+        btnNaik.onclick = function() { naikBaris(r); };
+        
+        var btnTurun = document.createElement("button");
+        btnTurun.className = "btn-kecil btn-kecil-turun";
+        btnTurun.textContent = "↓";
+        btnTurun.onclick = function() { turunBaris(r); };
+        
         var btnX = document.createElement("button");
-        btnX.className = "btn-x-card";
-        btnX.textContent = "✕ HAPUS";
-        btnX.onclick = function() {
-            simpanFormCard();
-            if (item.rows.length > 1) { item.rows.splice(r, 1); bukaFormCard(editIndex); }
-        };
-        hdr.appendChild(btnX);
+        btnX.className = "btn-kecil btn-kecil-hapus";
+        btnX.textContent = "✕";
+        btnX.onclick = function() { hapusBaris(r); };
+        
+        aksi.appendChild(btnNaik);
+        aksi.appendChild(btnTurun);
+        aksi.appendChild(btnX);
+        hdr.appendChild(aksi);
         card.appendChild(hdr);
         
         row.values.forEach(function(val, c) {
             var f = document.createElement("div");
             f.className = "card-field";
             var hLabel = (row.overrides && row.overrides[c]) ? row.overrides[c] : item.items[c];
-            f.innerHTML = '<label>' + hLabel + ' (header bisa diubah)</label>';
+            f.innerHTML = '<label>Data ' + (c+1) + ' (header bisa diubah)</label>';
             
             var inpHeader = document.createElement("input");
             inpHeader.type = "text";
+            inpHeader.className = "header-input";
             inpHeader.value = hLabel;
             inpHeader.setAttribute("data-header-r", r);
             inpHeader.setAttribute("data-header-c", c);
@@ -342,20 +394,112 @@ function bukaFormCard(i) {
     btnTambah.style.width = "100%";
     btnTambah.style.marginTop = "15px";
     btnTambah.onclick = function() {
-        simpanFormCard();
+        simpanFormTabel();
         var barisBaru = { values: [], overrides: null };
         for (var k = 0; k < item.items.length; k++) barisBaru.values.push("");
         item.rows.push(barisBaru);
-        bukaFormCard(editIndex);
+        bukaFormTabel(editIndex);
     };
     isi.appendChild(btnTambah);
     
     document.getElementById("form-overlay").classList.add("aktif");
 }
 
-function simpanFormText() {
-    if (editTipe !== "text" || editIndex < 0) return;
-    var item = dataText.text[editIndex];
+// ==================== BARIS: NAIK / TURUN / HAPUS ====================
+function naikBaris(r) {
+    if (r <= 0) return;
+    var item = dataTabel.card[editIndex];
+    simpanFormTabel();
+    var temp = item.rows[r];
+    item.rows[r] = item.rows[r-1];
+    item.rows[r-1] = temp;
+    bukaFormTabel(editIndex);
+}
+
+function turunBaris(r) {
+    var item = dataTabel.card[editIndex];
+    if (r >= item.rows.length - 1) return;
+    simpanFormTabel();
+    var temp = item.rows[r];
+    item.rows[r] = item.rows[r+1];
+    item.rows[r+1] = temp;
+    bukaFormTabel(editIndex);
+}
+
+function hapusBaris(r) {
+    var item = dataTabel.card[editIndex];
+    simpanFormTabel();
+    if (item.rows.length > 1) {
+        item.rows.splice(r, 1);
+        bukaFormTabel(editIndex);
+    }
+}
+
+// ==================== HALAMAN: NAIK / TURUN / HAPUS ====================
+function naikHalaman() {
+    if (editIndex <= 0) return;
+    if (editTipe === "teks") {
+        simpanFormTeks();
+        var temp = dataTeks.text[editIndex];
+        dataTeks.text[editIndex] = dataTeks.text[editIndex-1];
+        dataTeks.text[editIndex-1] = temp;
+        editIndex--;
+    } else if (editTipe === "tabel") {
+        simpanFormTabel();
+        var temp = dataTabel.card[editIndex];
+        dataTabel.card[editIndex] = dataTabel.card[editIndex-1];
+        dataTabel.card[editIndex-1] = temp;
+        editIndex--;
+    }
+    setStatus("Halaman dipindah ke atas", "hijau");
+    if (editTipe === "teks") bukaFormTeks(editIndex);
+    else bukaFormTabel(editIndex);
+    tampilkanDaftarTabel();
+    tampilkanDaftarTeks();
+}
+
+function turunHalaman() {
+    if (editTipe === "teks") {
+        if (editIndex >= dataTeks.text.length - 1) return;
+        simpanFormTeks();
+        var temp = dataTeks.text[editIndex];
+        dataTeks.text[editIndex] = dataTeks.text[editIndex+1];
+        dataTeks.text[editIndex+1] = temp;
+        editIndex++;
+    } else if (editTipe === "tabel") {
+        if (editIndex >= dataTabel.card.length - 1) return;
+        simpanFormTabel();
+        var temp = dataTabel.card[editIndex];
+        dataTabel.card[editIndex] = dataTabel.card[editIndex+1];
+        dataTabel.card[editIndex+1] = temp;
+        editIndex++;
+    }
+    setStatus("Halaman dipindah ke bawah", "hijau");
+    if (editTipe === "teks") bukaFormTeks(editIndex);
+    else bukaFormTabel(editIndex);
+    tampilkanDaftarTabel();
+    tampilkanDaftarTeks();
+}
+
+function hapusHalaman() {
+    if (!confirm("Hapus halaman ini?")) return;
+    
+    if (editTipe === "teks") {
+        dataTeks.text.splice(editIndex, 1);
+    } else if (editTipe === "tabel") {
+        dataTabel.card.splice(editIndex, 1);
+    }
+    
+    setStatus("Halaman dihapus", "hijau");
+    tutupForm();
+    tampilkanDaftarTabel();
+    tampilkanDaftarTeks();
+}
+
+// ==================== SIMPAN ====================
+function simpanFormTeks() {
+    if (editTipe !== "teks" || editIndex < 0) return;
+    var item = dataTeks.text[editIndex];
     var j = document.getElementById("f-judul");
     var d = document.getElementById("f-durasi");
     var i = document.getElementById("f-isi");
@@ -364,9 +508,9 @@ function simpanFormText() {
     if (i) item.isi = i.value;
 }
 
-function simpanFormCard() {
-    if (editTipe !== "card" || editIndex < 0) return;
-    var item = dataCard.card[editIndex];
+function simpanFormTabel() {
+    if (editTipe !== "tabel" || editIndex < 0) return;
+    var item = dataTabel.card[editIndex];
     var j = document.getElementById("f-judul");
     var s = document.getElementById("f-subjudul");
     var d = document.getElementById("f-durasi");
@@ -394,12 +538,12 @@ function simpanFormCard() {
 }
 
 function simpanForm() {
-    if (editTipe === "text") simpanFormText();
-    else if (editTipe === "card") simpanFormCard();
+    if (editTipe === "teks") simpanFormTeks();
+    else if (editTipe === "tabel") simpanFormTabel();
     setStatus("Disimpan", "hijau");
     tutupForm();
-    tampilkanDaftarText();
-    tampilkanDaftarCard();
+    tampilkanDaftarTabel();
+    tampilkanDaftarTeks();
 }
 
 function tutupForm() {
@@ -408,21 +552,22 @@ function tutupForm() {
     editTipe = "";
 }
 
+// ==================== KIRIM ====================
 function kirimData() {
-    if (!dataText || !dataCard) { setStatus("Belum ada data", "merah"); return; }
+    if (!dataTeks || !dataTabel) { setStatus("Belum ada data", "merah"); return; }
     setStatus("Mengirim data...", "biru");
     var selesai = 0;
     var gagal = false;
     
     fetch("http://" + serverIP + ":" + SERVER_PORT + "/text", {
         method: "POST", headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(dataText)
+        body: JSON.stringify(dataTeks)
     }).then(function() { selesai++; if (selesai === 2) selesaiKirim(); })
       .catch(function() { gagal = true; selesai++; if (selesai === 2) selesaiKirim(); });
     
     fetch("http://" + serverIP + ":" + SERVER_PORT + "/card", {
         method: "POST", headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(dataCard)
+        body: JSON.stringify(dataTabel)
     }).then(function() { selesai++; if (selesai === 2) selesaiKirim(); })
       .catch(function() { gagal = true; selesai++; if (selesai === 2) selesaiKirim(); });
     
@@ -430,32 +575,39 @@ function kirimData() {
         if (gagal) setStatus("Gagal kirim sebagian", "merah");
         else {
             setStatus("Data BERHASIL dikirim! Editor di-reset.", "hijau");
-            dataText = null; dataCard = null;
-            document.getElementById("daftar-text").innerHTML = "";
-            document.getElementById("daftar-card").innerHTML = "";
+            dataTeks = null; dataTabel = null;
+            document.getElementById("daftar-teks").innerHTML = "";
+            document.getElementById("daftar-tabel").innerHTML = "";
             document.getElementById("btn-kirim").disabled = true;
+            document.getElementById("tab-bar").style.display = "none";
+            document.getElementById("area-tabel").className = "hidden";
+            document.getElementById("area-teks").className = "hidden";
+            document.getElementById("btn-tambah-tabel").style.display = "none";
+            document.getElementById("btn-tambah-teks").style.display = "none";
         }
     }
 }
 
-function tambahText() {
-    if (!dataText) return;
-    dataText.text.push({ id: Date.now(), judul: "Text Baru", isi: "Isi text di sini", durasi: 15 });
-    tampilkanDaftarText();
+// ==================== TAMBAH ====================
+function tambahTeks() {
+    if (!dataTeks) return;
+    dataTeks.text.push({ id: Date.now(), judul: "Teks Baru", isi: "Isi teks di sini", durasi: 15 });
+    tampilkanDaftarTeks();
 }
 
-function tambahCard() {
-    if (!dataCard) return;
-    dataCard.card.push({
-        id: Date.now(), judul: "Card Baru", subjudul: "",
-        jumlah_item: 3, items: ["Item 1", "Item 2", "Item 3"],
+function tambahTabel() {
+    if (!dataTabel) return;
+    dataTabel.card.push({
+        id: Date.now(), judul: "Tabel Baru", subjudul: "",
+        jumlah_item: 3, items: ["Data 1", "Data 2", "Data 3"],
+        tema: "biru",
         durasi: 15,
         rows: [
             { values: ["", "", ""], overrides: null },
             { values: ["", "", ""], overrides: null }
         ]
     });
-    tampilkanDaftarCard();
+    tampilkanDaftarTabel();
 }
 
 window.addEventListener("load", function() { deteksiIP(); });
