@@ -33,7 +33,6 @@ body { background: #d9dde3; color: #000; padding: 15px; padding-bottom: 100px; f
 .item-card .subjudul { font-size: 14px; color: #888; font-style: italic; margin-bottom: 10px; }
 .item-aksi { display: flex; gap: 8px; }
 .item-aksi .btn-kecil { flex: 1; padding: 10px; font-size: 14px; }
-.item-aksi .btn-buka { background: #1a5c99; }
 .btn-kecil { border: none; border-radius: 6px; padding: 8px 12px; font-size: 14px; font-weight: bold; cursor: pointer; color: #fff; }
 .btn-kecil:active { transform: scale(0.96); }
 .btn-kecil-naik { background: #1a5c99; }
@@ -202,7 +201,6 @@ function selesaiAmbil() {
     document.getElementById("btn-tambah-teks").style.display = "block";
 }
 
-// ==================== DAFTAR TABEL ====================
 function tampilkanDaftarTabel() {
     if (!dataTabel) return;
     var c = document.getElementById("daftar-tabel");
@@ -252,7 +250,6 @@ function tampilkanDaftarTabel() {
     });
 }
 
-// ==================== DAFTAR TEKS ====================
 function tampilkanDaftarTeks() {
     if (!dataTeks) return;
     var c = document.getElementById("daftar-teks");
@@ -302,7 +299,6 @@ function tampilkanDaftarTeks() {
     });
 }
 
-// ==================== HALAMAN TABEL: NAIK/TURUN/HAPUS ====================
 function naikHalamanTabel(i) {
     if (i <= 0) return;
     var temp = dataTabel.card[i];
@@ -328,7 +324,6 @@ function hapusHalamanTabel(i) {
     setStatus("Halaman tabel dihapus", "hijau");
 }
 
-// ==================== HALAMAN TEKS: NAIK/TURUN/HAPUS ====================
 function naikHalamanTeks(i) {
     if (i <= 0) return;
     var temp = dataTeks.text[i];
@@ -354,7 +349,6 @@ function hapusHalamanTeks(i) {
     setStatus("Halaman teks dihapus", "hijau");
 }
 
-// ==================== FIELD ====================
 function buatField(label, tipe, id, nilai) {
     var div = document.createElement("div");
     div.className = "form-group";
@@ -378,7 +372,6 @@ function buatTextarea(label, id, nilai) {
     return div;
 }
 
-// ==================== FORM TEKS ====================
 function bukaFormTeks(i) {
     editIndex = i;
     editTipe = "teks";
@@ -386,7 +379,6 @@ function bukaFormTeks(i) {
     
     document.getElementById("form-judul").textContent = modeTambah ? "TAMBAH HALAMAN TEKS" : "EDIT HALAMAN TEKS " + (i+1);
     
-    // Atur tombol tutup/batal
     var btnTutup = document.getElementById("btn-tutup");
     if (modeTambah) {
         btnTutup.textContent = "BATAL";
@@ -402,7 +394,6 @@ function bukaFormTeks(i) {
     document.getElementById("form-overlay").classList.add("aktif");
 }
 
-// ==================== FORM TABEL ====================
 function bukaFormTabel(i) {
     editIndex = i;
     editTipe = "tabel";
@@ -540,7 +531,6 @@ function bukaFormTabel(i) {
     document.getElementById("form-overlay").classList.add("aktif");
 }
 
-// ==================== BARIS ====================
 function naikBaris(r) {
     if (r <= 0) return;
     var item = dataTabel.card[editIndex];
@@ -570,7 +560,6 @@ function hapusBaris(r) {
     }
 }
 
-// ==================== SIMPAN ====================
 function simpanFormTeks() {
     if (editTipe !== "teks" || editIndex < 0) return;
     var item = dataTeks.text[editIndex];
@@ -628,7 +617,6 @@ function simpanForm() {
 }
 
 function tutupForm() {
-    // Kalau mode tambah, hapus halaman yang baru ditambah
     if (modeTambah) {
         if (editTipe === "tabel" && editIndex >= 0) {
             dataTabel.card.splice(editIndex, 1);
@@ -646,7 +634,6 @@ function tutupForm() {
     editTipe = "";
 }
 
-// ==================== KIRIM ====================
 function kirimData() {
     if (!dataTeks || !dataTabel) { setStatus("Belum ada data", "merah"); return; }
     setStatus("Mengirim data...", "biru");
@@ -682,7 +669,6 @@ function kirimData() {
     }
 }
 
-// ==================== TAMBAH ====================
 function tambahTeks() {
     if (!dataTeks) return;
     dataTeks.text.push({ id: Date.now(), judul: "Teks Baru", isi: "Isi teks di sini", durasi: 15 });
@@ -704,3 +690,12 @@ function tambahTabel() {
     });
     modeTambah = true;
     bukaFormTabel(dataTabel.card.length - 1);
+}
+
+// ==================== INIT ====================
+deteksiIP();
+setTimeout(deteksiIP, 1000);
+</script>
+
+</body>
+</html>
