@@ -634,39 +634,37 @@ function tutupForm() {
     editTipe = "";
 }
 
+// ==================== KIRIM DATA (GABUNG) ====================
 function kirimData() {
     if (!dataTeks || !dataTabel) { setStatus("Belum ada data", "merah"); return; }
     setStatus("Mengirim data...", "biru");
-    var selesai = 0;
-    var gagal = false;
     
-    fetch("http://" + serverIP + ":" + SERVER_PORT + "/text", {
-        method: "POST", headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(dataTeks)
-    }).then(function() { selesai++; if (selesai === 2) selesaiKirim(); })
-      .catch(function() { gagal = true; selesai++; if (selesai === 2) selesaiKirim(); });
+    var dataKirim = {
+        text: dataTeks.text,
+        card: dataTabel.card
+    };
     
-    fetch("http://" + serverIP + ":" + SERVER_PORT + "/card", {
-        method: "POST", headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(dataTabel)
-    }).then(function() { selesai++; if (selesai === 2) selesaiKirim(); })
-      .catch(function() { gagal = true; selesai++; if (selesai === 2) selesaiKirim(); });
-    
-    function selesaiKirim() {
-        if (gagal) setStatus("Gagal kirim sebagian", "merah");
-        else {
-            setStatus("Data BERHASIL dikirim! Editor di-reset.", "hijau");
-            dataTeks = null; dataTabel = null;
-            document.getElementById("daftar-teks").innerHTML = "";
-            document.getElementById("daftar-tabel").innerHTML = "";
-            document.getElementById("btn-kirim").disabled = true;
-            document.getElementById("tab-bar").style.display = "none";
-            document.getElementById("area-tabel").className = "hidden";
-            document.getElementById("area-teks").className = "hidden";
-            document.getElementById("btn-tambah-tabel").style.display = "none";
-            document.getElementById("btn-tambah-teks").style.display = "none";
-        }
-    }
+    fetch("http://" + serverIP + ":" + SERVER_PORT + "/data", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(dataKirim)
+    })
+    .then(function(r) { return r.text(); })
+    .then(function(t) {
+        setStatus("Data BERHASIL dikirim! Editor di-reset.", "hijau");
+        dataTeks = null; dataTabel = null;
+        document.getElementById("daftar-teks").innerHTML = "";
+        document.getElementById("daftar-tabel").innerHTML = "";
+        document.getElementById("btn-kirim").disabled = true;
+        document.getElementById("tab-bar").style.display = "none";
+        document.getElementById("area-tabel").className = "hidden";
+        document.getElementById("area-teks").className = "hidden";
+        document.getElementById("btn-tambah-tabel").style.display = "none";
+        document.getElementById("btn-tambah-teks").style.display = "none";
+    })
+    .catch(function(err) {
+        setStatus("GAGAL KIRIM: " + err.message, "merah");
+    });
 }
 
 function tambahTeks() {
